@@ -5,7 +5,7 @@
 import random
 
 # Définition des constantes
-map_size = (10,10)
+map_size = (30,30)
 force_space_between_path = True
 path_coords = []
 
@@ -38,22 +38,27 @@ def CalculateNewStartPosition():
 
 number_calculation = 0
 
-while len(path_coords) < 30:
+while len(path_coords) < 100:
 	if number_calculation%10000 == 0:
 		print("Tentatives:",number_calculation)
 
 	start_coords, direction_start = CalculateNewStartPosition()
 	number_calculation += 1
 	path_coords = []
+	map = []
+	for loop in range (map_size[0]+2):
+		map.append([0]*(map_size[1]+2))
+
 	path_coords.append(start_coords)
+	map[start_coords[0]][start_coords[1]] = 1
+
 	number_voisins = 2
 	stop_generation = False
 	direction = direction_start
 
 	while stop_generation == False:
 		number_change_direction = 0
-		while not ((number_voisins < 2) and ((current_case[0],current_case[1]) not in path_coords)):
-			#print("Début loop:", current_case, last_case)
+		while not ((number_voisins < 2) and (map[current_case[0]][current_case[1]] == 0)):
 			current_case = list(path_coords[-1])
 			if direction == DIR_NORTH:
 				#Direction: Nord
@@ -70,13 +75,13 @@ while len(path_coords) < 30:
 
 			number_voisins = 0
 			if force_space_between_path:
-				if (current_case[0]+1,current_case[1]) in path_coords:
+				if map[current_case[0]+1][current_case[1]]:
 					number_voisins +=1
-				if (current_case[0]-1,current_case[1]) in path_coords:
+				if map[current_case[0]-1][current_case[1]]:
 					number_voisins +=1
-				if (current_case[0],current_case[1]+1) in path_coords:
+				if map[current_case[0]][current_case[1]+1]:
 					number_voisins +=1
-				if (current_case[0],current_case[1]-1) in path_coords:
+				if map[current_case[0]][current_case[1]-1]:
 					number_voisins +=1
 
 			if number_change_direction == 4:
@@ -94,6 +99,7 @@ while len(path_coords) < 30:
 			stop_generation = True
 
 		path_coords.append((current_case[0],current_case[1]))
+		map[current_case[0]][current_case[1]] = 1
 
 print(path_coords)
 
@@ -108,6 +114,11 @@ for row in range (1,map_size[0]+1):
 		else:
 			print(".", end="")
 	print("")
+
+# for row in range (map_size[0]+2):
+# 	for column in range (map_size[1]+2):
+# 		print(map[column][row], end="")
+# 	print("")
 
 print("Génération terminée en",number_calculation,"tentatives")
 print("Nombre de points:",len(path_coords))
