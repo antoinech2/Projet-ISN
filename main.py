@@ -8,6 +8,8 @@
 # Licence: Aucune
 # Version: InDev 0.1
 #
+# Script principal du jeu
+#
 # Description: Ce fichier contient le programme principal qui gère
 # la création de la fenêtre et la gestion de la boucle principale
 # Il appelle les fonctions pour afficher les éléments à l'écran,
@@ -43,6 +45,6 @@ def __main__():
 		pygame.display.update()
 
 	pygame.quit() #Arrêt de pygame lorsque on sort de la boucle
-############################################
+#############################################
 
 __main__()
