@@ -8,8 +8,6 @@
 # Licence: Aucune
 # Version: InDev 0.1
 #
-# Script principal du jeu
-#
 # Description: Ce fichier contient le programme principal qui gère
 # la création de la fenêtre et la gestion de la boucle principale
 # Il appelle les fonctions pour afficher les éléments à l'écran,
@@ -22,9 +20,15 @@ import pygame
 ############################################
 
 ############################################
+#Importation des modules:
+import map_generator
+############################################
+
+############################################
 #Définition des constantes générales du jeu:
 screen_size = (1500,1000)
 background_color = pygame.Color("red")
+map_size = (15,15)
 ############################################
 
 ############################################
@@ -39,12 +43,14 @@ def __main__():
 
 	is_game_running = True
 
+	path_coords = map_generator.CalculateNewPath()
+
 	#Boucle principale
 	while is_game_running:
 		screen.fill(background_color)
 		pygame.display.update()
 
 	pygame.quit() #Arrêt de pygame lorsque on sort de la boucle
-#############################################
+############################################
 
 __main__()
