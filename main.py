@@ -43,8 +43,7 @@ def __main__():
 
 	is_game_running = True
 
-	path_coords = map_generator.CalculateNewPath()
-
+	path_coords = map_generator.CalculateNewPath(map_size)
 	#Boucle principale
 	while is_game_running:
 		screen.fill(background_color)

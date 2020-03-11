@@ -21,7 +21,6 @@ import random
 
 ############################################
 # Définition des constantes
-map_size = (15,15)
 force_space_between_path = True
 path_coords = []
 min_path_length = 50
@@ -36,7 +35,7 @@ DIR_WEST = 4
 ############################################
 # Définition des fonctions locales:
 
-def CalculateNewStartPosition():
+def CalculateNewStartPosition(map_size):
 	"Fonction de calcul du point de départ du chemin sur un bord de la carte"
 	if random.randint(0,1) == 1:       		#X=1 ou X=taille
 		if random.randint(0,1) == 1:		#X=1
@@ -60,7 +59,8 @@ def CalculateNewStartPosition():
 
 #number_calculation = 0
 
-def CalculateNewPath():
+def CalculateNewPath(map_size):
+	"Fonction de calcul aléatoire d'un chemin qui correspond aux critères donnés."
 	global path_coords
 	while len(path_coords) < min_path_length:
 		#if number_calculation%10000 == 0:
@@ -68,7 +68,7 @@ def CalculateNewPath():
 		#number_calculation += 1
 
 		# Initialisation de la génération d'un chemin
-		start_coords, direction_start = CalculateNewStartPosition()
+		start_coords, direction_start = CalculateNewStartPosition(map_size)
 		path_coords = []
 		map = []
 		for loop in range (map_size[0]+2):
