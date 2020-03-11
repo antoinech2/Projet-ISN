@@ -49,6 +49,7 @@ def __main__():
 
 	#Boucle principale
 	while is_game_running:
+		events = pygame.event.get()
 		screen.fill(background_color)
 		screen.blit(map_surface,(0,0))
 		pygame.display.update()
