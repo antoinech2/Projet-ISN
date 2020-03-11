@@ -34,5 +34,5 @@ def ShowMap (map_size,path_coords):
                 current_box.fill((200,0,0))
             else :
                 current_box.fill((255,255,255))
-            map_surface.blit(current_box,(column*box_size_pixel[0],row*box_size_pixel[1]))
+            map_surface.blit(current_box,((column-1)*box_size_pixel[0],(row-1)*box_size_pixel[1]))
     return map_surface
