@@ -22,12 +22,13 @@ import pygame
 ############################################
 #Importation des modules:
 import map_generator
+import map_drawing
 ############################################
 
 ############################################
 #Définition des constantes générales du jeu:
 screen_size = (1500,1000)
-background_color = pygame.Color("red")
+background_color = pygame.Color("white")
 map_size = (15,15)
 ############################################
 
@@ -44,9 +45,12 @@ def __main__():
 	is_game_running = True
 
 	path_coords = map_generator.CalculateNewPath(map_size)
+	map_surface=map_drawing.ShowMap(map_size,path_coords)
+
 	#Boucle principale
 	while is_game_running:
 		screen.fill(background_color)
+		screen.blit(map_surface,(0,0))
 		pygame.display.update()
 
 	pygame.quit() #Arrêt de pygame lorsque on sort de la boucle
