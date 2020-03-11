@@ -20,13 +20,13 @@ import pygame
 
 ############################################
 #definition des constantes :
-map_size_pixel=(800,500)
+map_size_pixel=(825,525)
 
 ############################################
 #definition de la fonction d'affichage :
 def ShowMap (map_size,path_coords):
     box_size_pixel=((map_size_pixel[0]/map_size[0]),(map_size_pixel[1]/map_size[1]))
-    map_surface=pygame.Surface(map_size)
+    map_surface=pygame.Surface(map_size_pixel)
     for column in range (1,map_size[0]+1):
         for row in range (1,map_size[1]+1):
             current_box=pygame.Surface(box_size_pixel)
