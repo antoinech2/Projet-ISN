@@ -5,7 +5,7 @@
 # Auteurs: Titouan Escaille, Antoine Cheucle
 # Encodage: UTF-8
 # Licence: Aucune
-# Version: InDev 0.1
+# Version: InDev 0.2
 #
 # Script principal d'affichage graphique de la map
 #
@@ -21,16 +21,13 @@ import math
 ############################################
 
 ############################################
-# Définition des constantes :
-map_size_pixel=(800,500)
-############################################
-
-############################################
 # Définition des fonctions locales:
-
-def CreateMapSurface(map_size,path_coords):
+def CreateMapSurface(map_size,path_coords, screen_size):
 	"Fonction de création de la surface pygame représentant la map"
+	# Définition des constantes de fonction:
+	map_size_pixel = (0.8*screen_size[0],0.8*screen_size[1])
 	box_size_pixel = (math.floor(map_size_pixel[0]/map_size[0]),math.floor(map_size_pixel[1]/map_size[1]))
+	############################################
 	map_surface = pygame.Surface(map_size_pixel)
 	for column in range (1,map_size[0]+1):
 		for row in range (1,map_size[1]+1):

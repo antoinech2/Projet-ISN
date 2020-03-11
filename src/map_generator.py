@@ -5,7 +5,7 @@
 # Auteurs: Titouan Escaille, Antoine Cheucle
 # Encodage: UTF-8
 # Licence: Aucune
-# Version: InDev 0.1
+# Version: InDev 0.2
 #
 # Script de génération aléatoire du chemin
 #
