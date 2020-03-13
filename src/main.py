@@ -22,6 +22,7 @@ import pygame
 #Importation des modules:
 import map_generator
 import map_drawing
+import enemy
 ############################################
 
 ############################################
@@ -45,6 +46,8 @@ def __main__():
 
 	path_coords = map_generator.CalculateNewPath(map_size)
 	map_surface = map_drawing.CreateMapSurface(map_size,path_coords, screen_size)
+	all_enemies = pygame.sprite.Group()
+	all_enemies.add(enemy.enemy())
 
 	#Boucle principale
 	while is_game_running:
@@ -56,6 +59,7 @@ def __main__():
 				screen_size = (event.w, event.h)
 				map_surface = map_drawing.CreateMapSurface(map_size,path_coords, screen_size)
 		screen.blit(map_surface,(0,0))
+		all_enemies.draw(screen)
 		pygame.display.update()
 
 	pygame.quit() #Arrêt de pygame lorsque on sort de la boucle
