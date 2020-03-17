@@ -19,7 +19,10 @@
 import pygame
 import math
 ############################################
+# Importation des images :
 
+img_chemin = pygame.image.load('../res/textures/map/chemin.png')
+img_herbe = pygame.image.load('../res/textures/map/herbe.png')
 ############################################
 # Définition des fonctions locales:
 def CreateMapSurface(map_size,path_coords, screen_size):
@@ -27,14 +30,16 @@ def CreateMapSurface(map_size,path_coords, screen_size):
 	# Définition des constantes de fonction:
 	map_size_pixel = (0.8*screen_size[0],0.8*screen_size[1])
 	box_size_pixel = (math.floor(map_size_pixel[0]/map_size[0]),math.floor(map_size_pixel[1]/map_size[1]))
+	img_che = pygame.transform.scale(img_herbe,(box_size_pixel[0],box_size_pixel[1]))
+	img_herb = pygame.transform.scale(img_chemin,(box_size_pixel[0],box_size_pixel[1]))
 	############################################
 	map_surface = pygame.Surface(map_size_pixel)
 	for column in range (1,map_size[0]+1):
 		for row in range (1,map_size[1]+1):
 			current_box = pygame.Surface(box_size_pixel)
 			if (column,row) in path_coords:
-				current_box.fill((200,0,0))
+				image = img_herb
 			else :
-				current_box.fill((255,255,255))
-			map_surface.blit(current_box,((column-1)*box_size_pixel[0],(row-1)*box_size_pixel[1]))
+				image = img_che
+			map_surface.blit(image,((column-1)*box_size_pixel[0],(row-1)*box_size_pixel[1]))
 	return map_surface
