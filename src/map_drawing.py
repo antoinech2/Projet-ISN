@@ -47,6 +47,6 @@ def CreateMapSurface(map_size,path_coords, screen_size):
 			if (column,row) in path_coords:
 				image = img_che
 			else :
-				image = image = random.choice([img_herbv2,img_plant,img_arbr])
+				image = image = random.choice([img_herbv2,img_herbv2,img_herbv2,img_herbv2,img_herbv2,img_plant,img_arbr])
 			map_surface.blit(image,((column-1)*box_size_pixel[0],(row-1)*box_size_pixel[1]))
 	return map_surface
