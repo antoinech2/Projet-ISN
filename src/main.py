@@ -45,23 +45,37 @@ def __main__():
 	is_game_running = True
 
 	path_coords = map_generator.CalculateNewPath(map_size)
-	map_surface = map_drawing.CreateMapSurface(map_size,path_coords, screen_size)
+	map_surface, box_size_pixel = map_drawing.CreateMapSurface(map_size,path_coords, screen_size)
+	enemy.Init(path_coords, box_size_pixel)
 	all_enemies = pygame.sprite.Group()
-	all_enemies.add(enemy.enemy())
-
+	all_enemies.add(enemy.Enemy())
+	current_tick = 0
 	#Boucle principale
 	while is_game_running:
+		current_tick += 1
+
+		#EVENTS
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				is_game_running = False
 			elif event.type == pygame.VIDEORESIZE:
 				pygame.display.set_mode(event.size, pygame.RESIZABLE)
 				screen_size = (event.w, event.h)
-				map_surface = map_drawing.CreateMapSurface(map_size,path_coords, screen_size)
+				map_surface, box_size_pixel = map_drawing.CreateMapSurface(map_size,path_coords, screen_size)
+
+		#CALCULS
+		if current_tick%1000 == 0:
+			all_enemies.add(enemy.Enemy())
+		for current_enemy in all_enemies:
+			if current_enemy.HasFinished():
+				all_enemies.remove(current_enemy)
+			else:
+				current_enemy.Move()
+
+		#AFFICHAGE
 		screen.blit(map_surface,(0,0))
 		all_enemies.draw(screen)
-		pygame.display.update()
-
+		pygame.display.flip()
 	pygame.quit() #Arrêt de pygame lorsque on sort de la boucle
 ############################################
 
