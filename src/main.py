@@ -23,12 +23,16 @@ import pygame
 import map_generator
 import map_drawing
 import enemy
+import time
 ############################################
 
 ############################################
 #Définition des constantes générales du jeu:
-screen_size = (900,600)
-map_size = (10,10)
+screen_format = 9/16
+default_screen_size = (992,558)
+screen_size = default_screen_size
+min_screen_size = (750,422)
+map_size = (16,9)
 ############################################
 
 ############################################
@@ -46,25 +50,42 @@ def __main__():
 
 	path_coords = map_generator.CalculateNewPath(map_size)
 	map_surface, box_size_pixel = map_drawing.CreateMapSurface(map_size,path_coords, screen_size)
-	enemy.Init(path_coords, box_size_pixel)
+	enemy.Init(path_coords, box_size_pixel, 1)
 	all_enemies = pygame.sprite.Group()
 	all_enemies.add(enemy.Enemy())
 	current_tick = 0
 	#Boucle principale
 	while is_game_running:
 		current_tick += 1
+		time.sleep(0.01)
 
 		#EVENTS
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				is_game_running = False
 			elif event.type == pygame.VIDEORESIZE:
-				pygame.display.set_mode(event.size, pygame.RESIZABLE)
-				screen_size = (event.w, event.h)
-				map_surface, box_size_pixel = map_drawing.CreateMapSurface(map_size,path_coords, screen_size)
+				#Nouveau: event.w,event.h
+				#Ancien : screen_size = (992,558)
+				diff = (abs(event.w-screen_size[0]),abs(event.h-screen_size[1]))
+				if diff[0] > diff[1]:
+					w = max(min_screen_size[0],event.w)
+					new_width, new_height = w, int(w*screen_format)
+				else:
+					h = max(min_screen_size[1],event.h)
+					new_width, new_height = int(h/screen_format), h
+
+				changed_ratio = new_width/screen_size[0]
+				global_ratio = new_width/default_screen_size[0]
+				pygame.display.set_mode((new_width,new_height), pygame.RESIZABLE)
+				screen_size = (new_width, new_height)
+				map_surface, box_size_pixel = map_drawing.ResizeMapSurface(map_size, screen_size, map_surface)
+				enemy.Init(path_coords, box_size_pixel, global_ratio)
+				for current_enemy in all_enemies:
+					current_enemy.UpdatePosition(changed_ratio)
+					current_enemy.NewDestination()
 
 		#CALCULS
-		if current_tick%1000 == 0:
+		if current_tick%100 == 0:
 			all_enemies.add(enemy.Enemy())
 		for current_enemy in all_enemies:
 			if current_enemy.HasFinished():

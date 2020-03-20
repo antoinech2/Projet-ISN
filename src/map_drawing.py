@@ -50,3 +50,9 @@ def CreateMapSurface(map_size,path_coords, screen_size):
 				image = random.choice([img_herbv2,img_herbv2,img_herbv2,img_herbv2,img_herbv2,img_plant,img_arbr])
 			map_surface.blit(image,((column-1)*box_size_pixel[0],(row-1)*box_size_pixel[1]))
 	return map_surface, box_size_pixel
+
+def ResizeMapSurface(map_size, screen_size, map_surface):
+	map_size_pixel = (0.8*screen_size[0],0.8*screen_size[1])
+	box_size_pixel = (math.floor(map_size_pixel[0]/map_size[0]),math.floor(map_size_pixel[1]/map_size[1]))
+	map_surface = pygame.transform.scale(map_surface,(int(map_size_pixel[0]),int(map_size_pixel[1])))
+	return map_surface, box_size_pixel

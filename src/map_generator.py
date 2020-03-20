@@ -23,7 +23,7 @@ import random
 # Définition des constantes
 force_space_between_path = True
 path_coords = []
-min_path_length = 30
+min_path_length = 37
 
 #Constantes de direction:
 DIR_NORTH = 1
