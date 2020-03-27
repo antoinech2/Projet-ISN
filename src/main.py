@@ -5,7 +5,7 @@
 # Auteurs: Titouan Escaille, Antoine Cheucle
 # Encodage: UTF-8
 # Licence: Aucune
-# Version: InDev 0.2
+# Version: InDev 0.3
 #
 # Description: Ce fichier contient le programme principal qui gère
 # la création de la fenêtre et la gestion de la boucle principale
@@ -44,7 +44,7 @@ def __main__():
 
 	#Initialisation de la fenêtre
 	screen = pygame.display.set_mode(screen_size, pygame.RESIZABLE)
-	pygame.display.set_caption("Tower Defense v0.2")
+	pygame.display.set_caption("Tower Defense v0.3")
 
 	is_game_running = True
 
@@ -88,6 +88,7 @@ def __main__():
 		if current_tick%100 == 0:
 			all_enemies.add(enemy.Enemy())
 		for current_enemy in all_enemies:
+			current_enemy.TakeDamage(0.1)
 			if current_enemy.HasFinished():
 				all_enemies.remove(current_enemy)
 			else:
@@ -96,6 +97,8 @@ def __main__():
 		#AFFICHAGE
 		screen.blit(map_surface,(0,0))
 		all_enemies.draw(screen)
+		for current_enemy in all_enemies:
+			current_enemy.DisplayLifeBar(screen)
 		pygame.display.flip()
 	pygame.quit() #Arrêt de pygame lorsque on sort de la boucle
 ############################################

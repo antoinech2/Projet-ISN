@@ -12,6 +12,7 @@ def Init(path, box_pixel, ratio):
 	global_ratio = ratio
 
 class Enemy(pygame.sprite.Sprite):
+	life_bar_size = (25,4)
 	def __init__(self):
 		super().__init__()
 		self.max_health = 100
@@ -28,6 +29,10 @@ class Enemy(pygame.sprite.Sprite):
 		self.current_case_number = 0
 		self.position_precision = 15*global_ratio
 		self.destination_offset = 0.15
+
+		self.life_bar = pygame.Surface(Enemy.life_bar_size)
+		self.life_bar.fill(pygame.Color(0, 255, 0))
+
 		self.has_finished = False
 		self.NewDestination()
 	def Move(self):
@@ -56,3 +61,19 @@ class Enemy(pygame.sprite.Sprite):
 		self.has_finished = True
 	def HasFinished(self):
 		return self.has_finished
+	def DisplayLifeBar(self, dest):
+		dest.blit(self.life_bar, (self.rect.centerx-0.5*Enemy.life_bar_size[0],self.rect.y-7))
+	def TakeDamage(self, damage):
+		total_damage = self.resistance * damage
+		self.current_health -= total_damage
+		if self.current_health <= 0:
+			self.Death()
+		else:
+			self.life_bar.fill(pygame.Color("black"))
+			life_percent = self.current_health/self.max_health
+			new_bar = pygame.Surface((Enemy.life_bar_size[0]*life_percent,Enemy.life_bar_size[1]))
+			new_color = pygame.Color(int(255-(255*life_percent)),int(255*life_percent),0)
+			new_bar.fill(new_color)
+			self.life_bar.blit(new_bar, (0,0))
+	def Death(self):
+		self.has_finished = True
