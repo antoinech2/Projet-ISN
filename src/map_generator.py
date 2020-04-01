@@ -1,6 +1,6 @@
 ############################################
 # INFORMATIONS / DESCRIPTION:
-# Jeu Tower Defense Version 0.1
+# Jeu Tower Defense Version 0.3
 # Programme Python 3.7
 # Auteurs: Titouan Escaille, Antoine Cheucle
 # Encodage: UTF-8
@@ -21,9 +21,8 @@ import random
 
 ############################################
 # Définition des constantes
-force_space_between_path = True
-path_coords = []
-min_path_length = 37
+FORCE_SPACE_BETWEEN_PATH = True
+MIN_PATH_LENGTH = 37
 
 #Constantes de direction:
 DIR_NORTH = 1
@@ -61,8 +60,8 @@ def CalculateNewStartPosition(map_size):
 
 def CalculateNewPath(map_size):
 	"Fonction de calcul aléatoire d'un chemin qui correspond aux critères donnés."
-	global path_coords
-	while len(path_coords) < min_path_length:
+	path_coords = []
+	while len(path_coords) < MIN_PATH_LENGTH:
 		#if number_calculation%10000 == 0:
 		#	print("Tentatives:",number_calculation)
 		#number_calculation += 1
@@ -98,7 +97,7 @@ def CalculateNewPath(map_size):
 					current_case[1] -= 1
 
 				number_voisins = 0
-				if force_space_between_path:
+				if FORCE_SPACE_BETWEEN_PATH:
 					if map[current_case[0]+1][current_case[1]]:
 						number_voisins +=1
 					if map[current_case[0]-1][current_case[1]]:

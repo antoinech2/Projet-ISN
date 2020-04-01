@@ -1,6 +1,6 @@
 ############################################
 # INFORMATIONS / DESCRIPTION:
-# Jeu Tower Defense Version 0.1
+# Jeu Tower Defense Version 0.3
 # Programme Python 3.7
 # Auteurs: Titouan Escaille, Antoine Cheucle
 # Encodage: UTF-8
@@ -14,12 +14,12 @@
 ############################################
 
 ############################################
-#Importation des modules:
+#Importation des modules externes:
 import pygame
 ############################################
 
 ############################################
-#Importation des modules:
+#Importation des modules internes:
 import map_generator
 import map_drawing
 import enemy
@@ -27,37 +27,44 @@ import time
 ############################################
 
 ############################################
-#Définition des constantes générales du jeu:
-screen_format = 9/16
-default_screen_size = (992,558)
-screen_size = default_screen_size
-min_screen_size = (750,422)
-map_size = (16,9)
-############################################
-
-############################################
 #Définition de la fonction principale:
 def __main__():
-	global screen_size, map_size
 	"Fonction principale"
-	pygame.init() #Démarrage de Python
+
+	############################################
+	#Définition des constantes générales du jeu:
+	SCREEN_FORMAT = 9/16
+	DEFAULT_SCREEN_SIZE = (992,558)
+	MIN_SCREEN_SIZE = (750,422)
+	MAP_SIZE = (16,9)
+
+	TICK_TIME = 0.01 #Temps d'attente entre deux ticks en secondes
+	############################################
+
+	pygame.init() #Démarrage de pygame
 
 	#Initialisation de la fenêtre
+	screen_size = DEFAULT_SCREEN_SIZE
 	screen = pygame.display.set_mode(screen_size, pygame.RESIZABLE)
 	pygame.display.set_caption("Tower Defense v0.3")
 
+	#Initialisation du jeu
 	is_game_running = True
+	current_tick = 0
 
-	path_coords = map_generator.CalculateNewPath(map_size)
-	map_surface, box_size_pixel = map_drawing.CreateMapSurface(map_size,path_coords, screen_size)
-	enemy.Init(path_coords, box_size_pixel, 1)
+	#Génération du chemin aléatoire
+	path_coords = map_generator.CalculateNewPath(MAP_SIZE)
+	#Génération graphique du rendu de la carte
+	map_surface, box_size_pixel = map_drawing.CreateMapSurface(MAP_SIZE,path_coords, screen_size)
+	#Initialisation des ennemis
+	enemy.Enemy.Init(path_coords, box_size_pixel, 1)
 	all_enemies = pygame.sprite.Group()
 	all_enemies.add(enemy.Enemy())
-	current_tick = 0
+
 	#Boucle principale
 	while is_game_running:
 		current_tick += 1
-		time.sleep(0.01)
+		time.sleep(TICK_TIME)
 
 		#EVENTS
 		for event in pygame.event.get():
@@ -68,18 +75,18 @@ def __main__():
 				#Ancien : screen_size = (992,558)
 				diff = (abs(event.w-screen_size[0]),abs(event.h-screen_size[1]))
 				if diff[0] > diff[1]:
-					w = max(min_screen_size[0],event.w)
-					new_width, new_height = w, int(w*screen_format)
+					w = max(MIN_SCREEN_SIZE[0],event.w)
+					new_width, new_height = w, int(w*SCREEN_FORMAT)
 				else:
-					h = max(min_screen_size[1],event.h)
-					new_width, new_height = int(h/screen_format), h
+					h = max(MIN_SCREEN_SIZE[1],event.h)
+					new_width, new_height = int(h/SCREEN_FORMAT), h
 
 				changed_ratio = new_width/screen_size[0]
-				global_ratio = new_width/default_screen_size[0]
+				global_ratio = new_width/DEFAULT_SCREEN_SIZE[0]
 				pygame.display.set_mode((new_width,new_height), pygame.RESIZABLE)
 				screen_size = (new_width, new_height)
-				map_surface, box_size_pixel = map_drawing.ResizeMapSurface(map_size, screen_size, map_surface)
-				enemy.Init(path_coords, box_size_pixel, global_ratio)
+				map_surface, box_size_pixel = map_drawing.ResizeMapSurface(MAP_SIZE, screen_size, map_surface)
+				enemy.Enemy.Init(path_coords, box_size_pixel, global_ratio)
 				for current_enemy in all_enemies:
 					current_enemy.UpdatePosition(changed_ratio)
 					current_enemy.NewDestination()
@@ -88,7 +95,7 @@ def __main__():
 		if current_tick%100 == 0:
 			all_enemies.add(enemy.Enemy())
 		for current_enemy in all_enemies:
-			current_enemy.TakeDamage(0.1)
+			#current_enemy.TakeDamage(1)
 			if current_enemy.HasFinished():
 				all_enemies.remove(current_enemy)
 			else:
@@ -99,7 +106,10 @@ def __main__():
 		all_enemies.draw(screen)
 		for current_enemy in all_enemies:
 			current_enemy.DisplayLifeBar(screen)
+
+		#Rafraîchissement de l'écran
 		pygame.display.flip()
+
 	pygame.quit() #Arrêt de pygame lorsque on sort de la boucle
 ############################################
 
