@@ -22,7 +22,9 @@ import random
 ############################################
 # Importation des images :
 
+chemin_direction = []
 img_chemin = pygame.image.load('../res/textures/map/chemin.png')
+img_chemin_angle = pygame.image.load('../res/textures/map/chemin_angle.png')
 img_herbe = pygame.image.load('../res/textures/map/herbe.png')
 img_herbev2 = pygame.image.load('../res/textures/map/herbev2.png')
 img_plante = pygame.image.load('../res/textures/map/plante.png')
@@ -35,6 +37,7 @@ def CreateMapSurface(map_size,path_coords, screen_size):
 	map_size_pixel = (0.8*screen_size[0],0.8*screen_size[1])
 	box_size_pixel = (math.floor(map_size_pixel[0]/map_size[0]),math.floor(map_size_pixel[1]/map_size[1]))
 	img_che = pygame.transform.scale(img_chemin,(box_size_pixel[0],box_size_pixel[1]))
+	img_che_an = pygame.transform.scale(img_chemin_angle,(box_size_pixel[0],box_size_pixel[1]))
 	img_herb = pygame.transform.scale(img_herbe,(box_size_pixel[0],box_size_pixel[1]))
 	img_herbv2 = pygame.transform.scale(img_herbev2,(box_size_pixel[0],box_size_pixel[1]))
 	img_plant = pygame.transform.scale(img_plante,(box_size_pixel[0],box_size_pixel[1]))
@@ -44,8 +47,23 @@ def CreateMapSurface(map_size,path_coords, screen_size):
 	for column in range (1,map_size[0]+1):
 		for row in range (1,map_size[1]+1):
 			current_box = pygame.Surface(box_size_pixel)
+
+			if (column-1,row) in path_coords :
+					chemin_direction.append("west")
+			elif (column+1,row) in path_coords :
+					chemin_direction.append("east")
+			elif (column,row-1) in path_coords :
+					chemin_direction.append("north")
+			elif (column,row+1) in path_coords :
+					chemin_direction.append("south")
+
 			if (column,row) in path_coords:
-				image = img_che
+
+				if ["west","east"] in chemin_direction or ("north","south") in chemin_direction :
+					image = img_che
+				else :
+					image = img_che_an
+
 			else :
 				image = random.choice([img_herbv2,img_herbv2,img_herbv2,img_herbv2,img_herbv2,img_plant,img_arbr])
 			map_surface.blit(image,((column-1)*box_size_pixel[0],(row-1)*box_size_pixel[1]))
