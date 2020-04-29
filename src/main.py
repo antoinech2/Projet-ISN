@@ -76,8 +76,6 @@ def __main__():
 			if event.type == pygame.QUIT:
 				is_game_running = False
 			elif event.type == pygame.VIDEORESIZE:
-				#Nouveau: event.w,event.h
-				#Ancien : screen_size = (992,558)
 				diff = (abs(event.w-screen_size[0]),abs(event.h-screen_size[1]))
 				if diff[0] > diff[1]:
 					w = max(MIN_SCREEN_SIZE[0],event.w)
@@ -100,7 +98,7 @@ def __main__():
 					placing_tower.add(tower.Tower())
 			elif event.type == pygame.MOUSEBUTTONDOWN:
 				if placing_tower.sprite != None:
-					new_tower = placing_tower.sprite.PlaceTower(event.pos, all_towers, map_rect_list)
+					new_tower = placing_tower.sprite.PlaceTower(event.pos, all_towers, map_rect_list, map_surface)
 					if new_tower:
 						all_towers.add(new_tower)
 						placing_tower.empty()
@@ -109,13 +107,12 @@ def __main__():
 		if current_tick%100 == 0:
 			all_enemies.add(enemy.Enemy())
 		for current_enemy in all_enemies:
-			#current_enemy.TakeDamage(1)
 			if current_enemy.HasFinished():
 				all_enemies.remove(current_enemy)
 			else:
 				current_enemy.Move()
 		for current_tower in placing_tower:
-			current_tower.CursorPlace(pygame.mouse.get_pos(),all_towers, map_rect_list)
+			current_tower.CursorPlace(pygame.mouse.get_pos(),all_towers, map_rect_list, map_surface)
 
 		#AFFICHAGE
 		screen.blit(map_surface,(0,0))

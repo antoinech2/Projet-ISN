@@ -8,7 +8,7 @@
 # Version: InDev 0.3
 #
 # Description: Ce fichier contient l'objet qui gère les tours du jeu
-# Il contient toutes les méthodes pour ...
+# Il contient toutes les méthodes pour ajouter et placer des tours sur la map
 ############################################
 
 ############################################
@@ -35,17 +35,21 @@ class Tower(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 		self.rect.center = (0,0)
 
-	def CursorPlace(self, position, group, rect_list):
-		self.rect.center = (position[0],position[1])
-		collide = pygame.sprite.spritecollide(self,group, False)
-		if collide == [] and self.rect.collidelist(rect_list) == -1:
-			self.image.fill(pygame.Color("green"))
+	def CursorPlace(self, position, group, rect_list, map_rect):
+		if map_rect.get_rect().collidepoint(position):
+			self.rect.center = (position[0],position[1])
+			collide = pygame.sprite.spritecollide(self,group, False)
+			if collide == [] and self.rect.collidelist(rect_list) == -1:
+				self.image.fill(pygame.Color("green"))
+			else:
+				self.image.fill(pygame.Color("red"))
 		else:
-			self.image.fill(pygame.Color("red"))
+			self.rect.center = (-100,-100)
 
-	def PlaceTower(self, position, group, rect_list):
-		self.rect.center = (position[0],position[1])
-		collide = pygame.sprite.spritecollide(self,group, False)
-		if collide == [] and self.rect.collidelist(rect_list) == -1:
-			self.image.fill(pygame.Color("blue"))
-			return self
+	def PlaceTower(self, position, group, rect_list, map_rect):
+		if map_rect.get_rect().collidepoint(position):
+			self.rect.center = (position[0],position[1])
+			collide = pygame.sprite.spritecollide(self,group, False)
+			if collide == [] and self.rect.collidelist(rect_list) == -1:
+				self.image.fill(pygame.Color("blue"))
+				return self
