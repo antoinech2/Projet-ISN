@@ -22,7 +22,6 @@ import random
 ############################################
 # Importation des images :
 
-chemin_direction = []
 img_chemin = pygame.image.load('../res/textures/map/chemin.png')
 img_chemin_angle = pygame.image.load('../res/textures/map/chemin_angle.png')
 img_herbe = pygame.image.load('../res/textures/map/herbe.png')
@@ -47,19 +46,20 @@ def CreateMapSurface(map_size,path_coords, screen_size):
 	for column in range (1,map_size[0]+1):
 		for row in range (1,map_size[1]+1):
 			current_box = pygame.Surface(box_size_pixel)
+			chemin_direction = []
 
 			if (column-1,row) in path_coords :
-					chemin_direction.append("west")
-			elif (column+1,row) in path_coords :
-					chemin_direction.append("east")
-			elif (column,row-1) in path_coords :
-					chemin_direction.append("north")
-			elif (column,row+1) in path_coords :
-					chemin_direction.append("south")
+				chemin_direction.append("west")
+			if (column+1,row) in path_coords :
+				chemin_direction.append("east")
+			if (column,row-1) in path_coords :
+				chemin_direction.append("north")
+			if (column,row+1) in path_coords :
+				chemin_direction.append("south")
 
 			if (column,row) in path_coords:
 
-				if ["west","east"] in chemin_direction or ("north","south") in chemin_direction :
+				if chemin_direction == ["west","east"] or chemin_direction == ["north","south"]:
 					image = img_che
 				else :
 					image = img_che_an
