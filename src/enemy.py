@@ -20,7 +20,7 @@ import random
 ############################################
 
 ############################################
-# Définition de la clas qui gère les ennemis:
+# Définition de la class qui gère les ennemis:
 class Enemy(pygame.sprite.Sprite):
 	"Définition de la class Ennemis"
 	#Définition des constantes globales à la class
@@ -40,6 +40,10 @@ class Enemy(pygame.sprite.Sprite):
 		self.current_health = self.max_health
 		self.resistance = 0.9
 		self.speed = 1.5*Enemy.global_ratio
+
+		self.position_precision = 15*Enemy.global_ratio
+		self.destination_offset = 0.15
+
 		self.image = pygame.Surface((30*Enemy.global_ratio,30*Enemy.global_ratio))
 		self.image.fill(pygame.Color(random.randint(0,255),random.randint(0,255),random.randint(0,255)))
 		#self.image = pygame.image.load("../res/textures/ennemy/enemy.PNG")
@@ -49,13 +53,11 @@ class Enemy(pygame.sprite.Sprite):
 		self.rect.x = self.coords[0]
 		self.rect.y = self.coords[1]
 		self.current_case_number = 0
-		self.position_precision = 15*Enemy.global_ratio
-		self.destination_offset = 0.15
+		self.has_finished = False
 
 		self.life_bar = pygame.Surface(Enemy.LIFE_BAR_SIZE)
 		self.life_bar.fill(pygame.Color("green"))
 
-		self.has_finished = False
 		self.NewDestination()
 	def Move(self):
 		"Méthode pour faire avancer l'ennemi de quelques pixels dans la bonne direction"

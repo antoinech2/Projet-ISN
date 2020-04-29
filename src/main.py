@@ -23,6 +23,7 @@ import pygame
 import map_generator
 import map_drawing
 import enemy
+import tower
 import time
 ############################################
 
@@ -55,11 +56,15 @@ def __main__():
 	#Génération du chemin aléatoire
 	path_coords = map_generator.CalculateNewPath(MAP_SIZE)
 	#Génération graphique du rendu de la carte
-	map_surface, box_size_pixel = map_drawing.CreateMapSurface(MAP_SIZE,path_coords, screen_size)
+	map_surface, box_size_pixel, map_rect_list = map_drawing.CreateMapSurface(MAP_SIZE,path_coords, screen_size)
 	#Initialisation des ennemis
 	enemy.Enemy.Init(path_coords, box_size_pixel, 1)
 	all_enemies = pygame.sprite.Group()
 	all_enemies.add(enemy.Enemy())
+	#Initialisation des tours
+	tower.Tower.Init(path_coords, box_size_pixel, 1)
+	all_towers = pygame.sprite.Group()
+	placing_tower = pygame.sprite.GroupSingle()
 
 	#Boucle principale
 	while is_game_running:
@@ -90,6 +95,15 @@ def __main__():
 				for current_enemy in all_enemies:
 					current_enemy.UpdatePosition(changed_ratio)
 					current_enemy.NewDestination()
+			elif event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_t:
+					placing_tower.add(tower.Tower())
+			elif event.type == pygame.MOUSEBUTTONDOWN:
+				if placing_tower.sprite != None:
+					new_tower = placing_tower.sprite.PlaceTower(event.pos, all_towers, map_rect_list)
+					if new_tower:
+						all_towers.add(new_tower)
+						placing_tower.empty()
 
 		#CALCULS
 		if current_tick%100 == 0:
@@ -100,9 +114,13 @@ def __main__():
 				all_enemies.remove(current_enemy)
 			else:
 				current_enemy.Move()
+		for current_tower in placing_tower:
+			current_tower.CursorPlace(pygame.mouse.get_pos(),all_towers, map_rect_list)
 
 		#AFFICHAGE
 		screen.blit(map_surface,(0,0))
+		placing_tower.draw(screen)
+		all_towers.draw(screen)
 		all_enemies.draw(screen)
 		for current_enemy in all_enemies:
 			current_enemy.DisplayLifeBar(screen)
