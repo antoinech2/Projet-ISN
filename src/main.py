@@ -25,6 +25,7 @@ import map_drawing
 import enemy
 import tower
 import time
+import interfaces
 ############################################
 
 ############################################
@@ -50,8 +51,10 @@ def __main__():
 	pygame.display.set_caption("Tower Defense v0.3")
 
 	#Initialisation du jeu
+	current_gui = "game"
 	is_game_running = True
 	current_tick = 0
+	game_health = 2000
 
 	#Génération du chemin aléatoire
 	path_coords = map_generator.CalculateNewPath(MAP_SIZE)
@@ -93,34 +96,48 @@ def __main__():
 				for current_enemy in all_enemies:
 					current_enemy.UpdatePosition(changed_ratio)
 					current_enemy.NewDestination()
-			elif event.type == pygame.KEYDOWN:
-				if event.key == pygame.K_t:
-					placing_tower.add(tower.Tower())
-			elif event.type == pygame.MOUSEBUTTONDOWN:
-				if placing_tower.sprite != None:
-					new_tower = placing_tower.sprite.PlaceTower(event.pos, all_towers, map_rect_list, map_surface)
-					if new_tower:
-						all_towers.add(new_tower)
-						placing_tower.empty()
 
-		#CALCULS
-		if current_tick%100 == 0:
-			all_enemies.add(enemy.Enemy())
-		for current_enemy in all_enemies:
-			if current_enemy.HasFinished():
-				all_enemies.remove(current_enemy)
-			else:
-				current_enemy.Move()
-		for current_tower in placing_tower:
-			current_tower.CursorPlace(pygame.mouse.get_pos(),all_towers, map_rect_list, map_surface)
+			if current_gui == "game":
+				if event.type == pygame.KEYDOWN:
+					if event.key == pygame.K_t:
+						placing_tower.add(tower.Tower())
+				elif event.type == pygame.MOUSEBUTTONDOWN:
+					if placing_tower.sprite != None:
+						new_tower = placing_tower.sprite.PlaceTower(event.pos, all_towers, map_rect_list, map_surface)
+						if new_tower:
+							all_towers.add(new_tower)
+							placing_tower.empty()
 
-		#AFFICHAGE
-		screen.blit(map_surface,(0,0))
-		placing_tower.draw(screen)
-		all_towers.draw(screen)
-		all_enemies.draw(screen)
-		for current_enemy in all_enemies:
-			current_enemy.DisplayLifeBar(screen)
+		if current_gui == "game":
+
+			#CALCULS
+			if current_tick%100 == 0:
+				all_enemies.add(enemy.Enemy())
+			for current_enemy in all_enemies:
+				if current_enemy.HasFinished():
+					all_enemies.remove(current_enemy)
+					game_health -= current_enemy.GetHealth()
+				else:
+					current_enemy.Move()
+			for current_tower in placing_tower:
+				current_tower.CursorPlace(pygame.mouse.get_pos(),all_towers, map_rect_list, map_surface)
+
+			if game_health <= 0:
+				current_gui = "game_lost"
+
+			#AFFICHAGE
+			screen.blit(map_surface,(0,0))
+			placing_tower.draw(screen)
+			all_towers.draw(screen)
+			all_enemies.draw(screen)
+			for current_enemy in all_enemies:
+				current_enemy.DisplayLifeBar(screen)
+			screen.blit(interfaces.RenderRightGUI(screen_size, game_health),(screen_size[0]*0.8,0))
+
+		elif current_gui == "game_lost":
+			screen.fill(pygame.Color("blue"))
+			interfaces.RenderText("Fin de partie.", 80, "red", (screen_size[0]/2, screen_size[1]/4), screen)
+			interfaces.RenderText("Vous n'avez plus de vies.", 50, "yellow", (screen_size[0]/2, screen_size[1]/4+100), screen)
 
 		#Rafraîchissement de l'écran
 		pygame.display.flip()

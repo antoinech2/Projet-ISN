@@ -90,6 +90,9 @@ class Enemy(pygame.sprite.Sprite):
 	def HasFinished(self):
 		"Retourne l'état de course de l'ennemi"
 		return self.has_finished
+	def GetHealth(self):
+		"Retourne la vie restante de l'ennemi"
+		return self.current_health
 	def DisplayLifeBar(self, dest):
 		"Affiche la barre de vie de l'ennemi à l'écran"
 		dest.blit(self.life_bar, (self.rect.centerx-0.5*Enemy.LIFE_BAR_SIZE[0],self.rect.y-7))
