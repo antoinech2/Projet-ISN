@@ -63,6 +63,12 @@ def CreateMapSurface(map_size,path_coords, screen_size):
 
 				if chemin_direction == ["west","east"] or chemin_direction == ["north","south"]:
 					image = img_che
+
+					if chemin_direction == ["north","south"] :
+						img_che = pygame.transform.rotate(img_che, 90)
+					else :
+						 img_che = pygame.transform.rotate(img_che, 0)
+
 				else :
 					image = img_che_an
 				rect_list.append(pygame.Rect((column-1)*box_size_pixel[0],(row-1)*box_size_pixel[1],box_size_pixel[0],box_size_pixel[1]))
