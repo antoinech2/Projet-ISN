@@ -128,6 +128,8 @@ def __main__():
 			#AFFICHAGE
 			screen.blit(map_surface,(0,0))
 			placing_tower.draw(screen)
+			if placing_tower.sprite != None:
+				placing_tower.sprite.ShowRange(screen, screen_size)
 			all_towers.draw(screen)
 			all_enemies.draw(screen)
 			for current_enemy in all_enemies:

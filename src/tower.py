@@ -34,6 +34,7 @@ class Tower(pygame.sprite.Sprite):
 		self.image.fill(pygame.Color("red"))
 		self.rect = self.image.get_rect()
 		self.rect.center = (0,0)
+		self.range = 3*Tower.global_ratio*Tower.box_size_pixel[0]
 
 	def CursorPlace(self, position, group, rect_list, map_rect):
 		if map_rect.get_rect().collidepoint(position):
@@ -45,6 +46,11 @@ class Tower(pygame.sprite.Sprite):
 				self.image.fill(pygame.Color("red"))
 		else:
 			self.rect.center = (-100,-100)
+
+	def ShowRange(self, screen, screen_size):
+		surface = pygame.Surface(screen_size, pygame.SRCALPHA)
+		pygame.draw.circle(surface, pygame.Color(63, 127, 191, 128), self.rect.center, self.range)
+		screen.blit(surface, (0,0))
 
 	def PlaceTower(self, position, group, rect_list, map_rect):
 		if map_rect.get_rect().collidepoint(position):
