@@ -58,7 +58,6 @@ def CreateMapSurface(map_size,path_coords, screen_size):
 				chemin_direction.append("north")
 			if (column,row+1) in path_coords :
 				chemin_direction.append("south")
-
 			if (column,row) in path_coords:
 
 				if chemin_direction == ["west","east"] or chemin_direction == ["north","south"]:
@@ -75,9 +74,9 @@ def CreateMapSurface(map_size,path_coords, screen_size):
 					if chemin_direction == ["west","north"] :
 						image = pygame.transform.rotate(image, 0)
 					elif chemin_direction == ["west","south"] :
-						image = pygame.transform.rotate(image, 270)
-					elif chemin_direction == ["east","north"] :
 						image = pygame.transform.rotate(image, 90)
+					elif chemin_direction == ["east","north"] :
+						image = pygame.transform.rotate(image, 270)
 					else :
 						image = pygame.transform.rotate(image, 180)
 
