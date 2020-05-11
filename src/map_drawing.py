@@ -71,6 +71,16 @@ def CreateMapSurface(map_size,path_coords, screen_size):
 
 				else :
 					image = img_che_an
+
+					if chemin_direction == ["west","north"] :
+						image = pygame.transform.rotate(image, 0)
+					elif chemin_direction == ["west","south"] :
+						image = pygame.transform.rotate(image, 270)
+					elif chemin_direction == ["east","north"] :
+						image = pygame.transform.rotate(image, 90)
+					else :
+						image = pygame.transform.rotate(image, 180)
+
 				rect_list.append(pygame.Rect((column-1)*box_size_pixel[0],(row-1)*box_size_pixel[1],box_size_pixel[0],box_size_pixel[1]))
 			else :
 				image = random.choice([img_herbv2,img_herbv2,img_herbv2,img_herbv2,img_herbv2,img_plant,img_arbr])
