@@ -121,7 +121,6 @@ def __main__():
 					current_enemy.Move()
 			for current_tower in placing_tower:
 				current_tower.CursorPlace(pygame.mouse.get_pos(),all_towers, map_rect_list, map_surface)
-
 			if game_health <= 0:
 				current_gui = "game_lost"
 
@@ -134,6 +133,9 @@ def __main__():
 			all_enemies.draw(screen)
 			for current_enemy in all_enemies:
 				current_enemy.DisplayLifeBar(screen)
+			for current_tower in all_towers:
+				if current_tower.rect.collidepoint(pygame.mouse.get_pos()):
+					current_tower.ShowRange(screen, screen_size)
 			screen.blit(interfaces.RenderRightGUI(screen_size, game_health),(screen_size[0]*0.8,0))
 
 		elif current_gui == "game_lost":
