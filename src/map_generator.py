@@ -1,11 +1,11 @@
 ############################################
 # INFORMATIONS / DESCRIPTION:
-# Jeu Tower Defense Version 0.3
+# Jeu Tower Defense Version 0.4.0-InDev
 # Programme Python 3.7
 # Auteurs: Titouan Escaille, Antoine Cheucle
 # Encodage: UTF-8
 # Licence: Aucune
-# Version: InDev 0.3
+# Version: 0.4.0-InDev
 #
 # Script de génération aléatoire du chemin
 #
@@ -56,15 +56,10 @@ def CalculateNewStartPosition(map_size):
 	start_coords = (x_start,y_start)
 	return start_coords, direction_start
 
-#number_calculation = 0
-
 def CalculateNewPath(map_size):
 	"Fonction de calcul aléatoire d'un chemin qui correspond aux critères donnés."
 	path_coords = []
 	while len(path_coords) < MIN_PATH_LENGTH:
-		#if number_calculation%10000 == 0:
-		#	print("Tentatives:",number_calculation)
-		#number_calculation += 1
 
 		# Initialisation de la génération d'un chemin
 		start_coords, direction_start = CalculateNewStartPosition(map_size)
@@ -124,25 +119,3 @@ def CalculateNewPath(map_size):
 			path_coords.append((current_case[0],current_case[1]))
 			map[current_case[0]][current_case[1]] = 1
 	return path_coords
-
-# print(path_coords)
-#
-# for row in range (1,map_size[0]+1):
-# 	for column in range (1,map_size[1]+1):
-# 		if path_coords[0] == (column,row):
-# 			print("D", end="")
-# 		elif path_coords[-1] == (column,row):
-# 			print("A", end="")
-# 		elif (column,row) in path_coords:
-# 			print("°", end="")
-# 		else:
-# 			print(".", end="")
-# 	print("")
-#
-# for row in range (map_size[0]+2):
-# 	for column in range (map_size[1]+2):
-# 		print(map[column][row], end="")
-# 	print("")
-#
-# print("Génération terminée en",number_calculation,"tentatives")
-# print("Nombre de points:",len(path_coords))

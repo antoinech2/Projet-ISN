@@ -1,11 +1,11 @@
 ############################################
 # INFORMATIONS / DESCRIPTION:
-# Jeu Tower Defense Version 0.3
+# Jeu Tower Defense Version 0.4.0-InDev
 # Programme Python 3.7
 # Auteurs: Titouan Escaille, Antoine Cheucle
 # Encodage: UTF-8
 # Licence: Aucune
-# Version: InDev 0.3
+# Version: 0.4.0-InDev
 #
 # Description: Ce fichier contient le programme principal qui gère
 # la création de la fenêtre et la gestion de la boucle principale
@@ -74,10 +74,12 @@ def __main__():
 		current_tick += 1
 		time.sleep(TICK_TIME)
 
-		#EVENTS
+		#Lecture des événements
 		for event in pygame.event.get():
+			#Quitter le jeu
 			if event.type == pygame.QUIT:
 				is_game_running = False
+			#Redimention de la fenêtre
 			elif event.type == pygame.VIDEORESIZE:
 				diff = (abs(event.w-screen_size[0]),abs(event.h-screen_size[1]))
 				if diff[0] > diff[1]:
@@ -97,10 +99,13 @@ def __main__():
 					current_enemy.UpdatePosition(changed_ratio)
 					current_enemy.NewDestination()
 
+			#Evenements lors de la partie
 			if current_gui == "game":
+				#Ajout d'une tour avec la touche T
 				if event.type == pygame.KEYDOWN:
 					if event.key == pygame.K_t:
 						placing_tower.add(tower.Tower())
+				#Placement de la tour avec le clic de la souris
 				elif event.type == pygame.MOUSEBUTTONDOWN:
 					if placing_tower.sprite != None:
 						new_tower = placing_tower.sprite.PlaceTower(event.pos, all_towers, map_rect_list, map_surface)
@@ -108,23 +113,28 @@ def __main__():
 							all_towers.add(new_tower)
 							placing_tower.empty()
 
+		#Boucle lors de la partie
 		if current_gui == "game":
 
-			#CALCULS
+			#Calcul du tick
+			#Ajout d'un ennemi tous les 100 ticks
 			if current_tick%100 == 0:
 				all_enemies.add(enemy.Enemy())
+			#Avancement des ennemis et suppression des ennemis qui sont au bout du chemin
 			for current_enemy in all_enemies:
 				if current_enemy.HasFinished():
 					all_enemies.remove(current_enemy)
 					game_health -= current_enemy.GetHealth()
+					#Vérification du Game Over (plus de vie)
+					if game_health <= 0:
+						current_gui = "game_lost"
 				else:
 					current_enemy.Move()
+			#Changement de la couleur de la tour en placement en fonction des collisions
 			for current_tower in placing_tower:
 				current_tower.CursorPlace(pygame.mouse.get_pos(),all_towers, map_rect_list, map_surface)
-			if game_health <= 0:
-				current_gui = "game_lost"
 
-			#AFFICHAGE
+			#Affichage à l'écran
 			screen.blit(map_surface,(0,0))
 			placing_tower.draw(screen)
 			if placing_tower.sprite != None:
@@ -138,6 +148,7 @@ def __main__():
 					current_tower.ShowRange(screen, screen_size)
 			screen.blit(interfaces.RenderRightGUI(screen_size, game_health),(screen_size[0]*0.8,0))
 
+		#Boucle lors de l'écran de fin
 		elif current_gui == "game_lost":
 			screen.fill(pygame.Color("blue"))
 			interfaces.RenderText("Fin de partie.", 80, "red", (screen_size[0]/2, screen_size[1]/4), screen)
@@ -146,7 +157,8 @@ def __main__():
 		#Rafraîchissement de l'écran
 		pygame.display.flip()
 
-	pygame.quit() #Arrêt de pygame lorsque on sort de la boucle
+	#Arrêt de pygame lorsque on sort de la boucle
+	pygame.quit()
 ############################################
 
 __main__()

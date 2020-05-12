@@ -1,11 +1,11 @@
 ############################################
 # INFORMATIONS / DESCRIPTION:
-# Jeu Tower Defense Version 0.3
+# Jeu Tower Defense Version 0.4.0-InDev
 # Programme Python 3.7
 # Auteurs: Titouan Escaille, Antoine Cheucle
 # Encodage: UTF-8
 # Licence: Aucune
-# Version: InDev 0.3
+# Version: 0.4.0-InDev
 #
 # Description: Ce fichier contient l'objet qui gère les ennemis du jeu
 # Il contient toutes les méthodes pour le faire appairaitre, disparaitre

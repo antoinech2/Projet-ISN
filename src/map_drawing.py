@@ -5,7 +5,7 @@
 # Auteurs: Titouan Escaille, Antoine Cheucle
 # Encodage: UTF-8
 # Licence: Aucune
-# Version: InDev 0.3
+# Version: 0.4.0-InDev
 #
 # Script principal d'affichage graphique de la map
 #
@@ -84,6 +84,7 @@ def CreateMapSurface(map_size,path_coords, screen_size):
 	return map_surface, box_size_pixel, rect_list
 
 def ResizeMapSurface(map_size, screen_size, map_surface):
+	"Modification des constantes graphiques globales à la suite d'une redimention"
 	map_size_pixel = (0.8*screen_size[0],0.8*screen_size[1])
 	box_size_pixel = (math.floor(map_size_pixel[0]/map_size[0]),math.floor(map_size_pixel[1]/map_size[1]))
 	map_surface = pygame.transform.scale(map_surface,(int(map_size_pixel[0]),int(map_size_pixel[1])))
