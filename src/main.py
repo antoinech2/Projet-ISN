@@ -16,6 +16,7 @@
 ############################################
 #Importation des modules externes:
 import pygame
+import random
 ############################################
 
 ############################################
@@ -54,20 +55,25 @@ def __main__():
 	current_gui = "game"
 	is_game_running = True
 	current_tick = 0
+
 	game_health = 2000
+	game_money = 0
 
 	#Génération du chemin aléatoire
 	path_coords = map_generator.CalculateNewPath(MAP_SIZE)
 	#Génération graphique du rendu de la carte
 	map_surface, box_size_pixel, map_rect_list = map_drawing.CreateMapSurface(MAP_SIZE,path_coords, screen_size)
+
 	#Initialisation des ennemis
 	enemy.Enemy.Init(path_coords, box_size_pixel, 1)
 	all_enemies = pygame.sprite.Group()
 	all_enemies.add(enemy.Enemy())
+
 	#Initialisation des tours
 	tower.Tower.Init(path_coords, box_size_pixel, 1)
 	all_towers = pygame.sprite.Group()
 	placing_tower = pygame.sprite.GroupSingle()
+	ennemies_killed = 0
 
 	#Boucle principale
 	while is_game_running:
@@ -122,9 +128,10 @@ def __main__():
 				all_enemies.add(enemy.Enemy())
 			#Avancement des ennemis et suppression des ennemis qui sont au bout du chemin
 			for current_enemy in all_enemies:
+				current_enemy.TakeDamage(random.random(), game_money)
 				if current_enemy.HasFinished():
 					all_enemies.remove(current_enemy)
-					game_health -= current_enemy.GetHealth()
+					game_health -= int(current_enemy.GetHealth())
 					#Vérification du Game Over (plus de vie)
 					if game_health <= 0:
 						current_gui = "game_lost"
@@ -146,7 +153,7 @@ def __main__():
 			for current_tower in all_towers:
 				if current_tower.rect.collidepoint(pygame.mouse.get_pos()):
 					current_tower.ShowRange(screen, screen_size)
-			screen.blit(interfaces.RenderRightGUI(screen_size, game_health),(screen_size[0]*0.8,0))
+			screen.blit(interfaces.RenderRightGUI(screen_size, game_health, game_money, len(all_towers), len(all_enemies), ennemies_killed),(screen_size[0]*0.8,0))
 
 		#Boucle lors de l'écran de fin
 		elif current_gui == "game_lost":

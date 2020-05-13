@@ -36,6 +36,9 @@ class Tower(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 		self.rect.center = (0,0)
 		self.range = 3*Tower.global_ratio*Tower.box_size_pixel[0]
+		self.attack_damage = 10
+		self.attack_cooldown = 100
+		self.attack_enemies = 1
 
 	def CursorPlace(self, position, group, rect_list, map_rect):
 		"Calcul de la couleur de la tour en fonction de sa position sur le terrain (disponible ou non)"

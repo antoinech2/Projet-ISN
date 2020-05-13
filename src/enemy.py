@@ -37,9 +37,9 @@ class Enemy(pygame.sprite.Sprite):
 		"Constructeur du nouvel objet ennemi avec un lot de caractéristiques"
 		super().__init__()
 		self.max_health = 100
-		self.current_health = self.max_health
 		self.resistance = 0.9
 		self.speed = 1.5*Enemy.global_ratio
+		self.money_gain = 15
 
 		self.position_precision = 15*Enemy.global_ratio
 		self.destination_offset = 0.15
@@ -54,6 +54,7 @@ class Enemy(pygame.sprite.Sprite):
 		self.rect.y = self.coords[1]
 		self.current_case_number = 0
 		self.has_finished = False
+		self.current_health = self.max_health
 
 		self.life_bar = pygame.Surface(Enemy.LIFE_BAR_SIZE)
 		self.life_bar.fill(pygame.Color("green"))
@@ -96,12 +97,12 @@ class Enemy(pygame.sprite.Sprite):
 	def DisplayLifeBar(self, dest):
 		"Affiche la barre de vie de l'ennemi à l'écran"
 		dest.blit(self.life_bar, (self.rect.centerx-0.5*Enemy.LIFE_BAR_SIZE[0],self.rect.y-7))
-	def TakeDamage(self, damage):
+	def TakeDamage(self, damage, game_money):
 		"Fait prendre un certain nombre de dommage à l'ennemi"
 		total_damage = self.resistance * damage
 		self.current_health -= total_damage
 		if self.current_health <= 0:
-			self.Death()
+			self.Death(game_money)
 		else:
 			self.life_bar.fill(pygame.Color("black"))
 			life_percent = self.current_health/self.max_health
@@ -109,6 +110,7 @@ class Enemy(pygame.sprite.Sprite):
 			new_color = pygame.Color(int(255-(255*life_percent)),int(255*life_percent),0)
 			new_bar.fill(new_color)
 			self.life_bar.blit(new_bar, (0,0))
-	def Death(self):
+	def Death(self, game_money):
 		"Fait mourir l'ennemi (plus de vie)"
+		game_money += self.money_gain
 		self.has_finished = True
