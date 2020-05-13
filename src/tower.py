@@ -27,7 +27,7 @@ import interfaces
 ############################################
 # Définition de la class qui gère les tours:
 class Tower(pygame.sprite.Sprite):
-	LIFE_BAR_SIZE = (40,6)
+	LIFE_BAR_RANGE = 35
 
 	def __init__(self, game):
 		"Définition du constructeur avec toutes les caractéristiques des tours"
@@ -40,15 +40,15 @@ class Tower(pygame.sprite.Sprite):
 		self.last_attack = time.time()
 
 		self.range = int(2*self.game.global_ratio*self.game.box_size_pixel[0])
-		self.attack_damage = 10
+		self.attack_damage = 20
 		self.attack_cooldown = 1
 		self.attack_enemies = 1
 		self.cost = 15
 		self.shoot_max = 100
 		self.shoot_remain = self.shoot_max
 
-		self.life_bar = pygame.Surface(Tower.LIFE_BAR_SIZE)
-		self.life_bar.fill(pygame.Color("green"))
+		self.life_bar = pygame.Surface((2*Tower.LIFE_BAR_RANGE,2*Tower.LIFE_BAR_RANGE), pygame.SRCALPHA)
+		pygame.draw.ellipse(self.life_bar, pygame.Color("green"), self.life_bar.get_rect())
 
 	def CursorPlace(self, position):
 		"Calcul de la couleur de la tour en fonction de sa position sur le terrain (disponible ou non)"
@@ -88,28 +88,30 @@ class Tower(pygame.sprite.Sprite):
 
 	def DisplayLifeBar(self):
 		"Affiche la barre de vie de l'ennemi à l'écran"
-		self.game.screen.blit(self.life_bar, (self.rect.centerx-0.5*Tower.LIFE_BAR_SIZE[0],self.rect.y-6))
+		self.game.screen.blit(self.life_bar, (self.rect.centerx-Tower.LIFE_BAR_RANGE,self.rect.centery-Tower.LIFE_BAR_RANGE))
 
 	def Shot(self):
 		"Trouve l'ennemi le plus proche pour lui faire des dégâts"
 		if self.last_attack + self.attack_cooldown <= time.time():
-			nearest_distance = 999999
+			ennemies_distance = {}
 			for current_enemy in self.game.all_enemies:
 				distance = math.sqrt((self.rect.center[0] - current_enemy.rect.center[0])**2 + (self.rect.center[1] - current_enemy.rect.center[1])**2)
 				if distance < self.range :
-					if distance < nearest_distance:
-						nearest_distance = distance
-						nearest_ennemy = current_enemy
-			if nearest_distance != 999999:
-				nearest_ennemy.TakeDamage(self.attack_damage)
-				self.last_attack = time.time()
-				self.shoot_remain -= 1
-				if self.shoot_remain <= 0:
-					self.game.all_towers.remove(self)
+					ennemies_distance[round(distance,1)] = current_enemy
+			ennemies_attacked = 0
+			for index in sorted(ennemies_distance.keys()):
+				if ennemies_attacked < self.attack_enemies:
+					ennemies_attacked += 1
+					ennemies_distance[index].TakeDamage(self.attack_damage)
+					self.last_attack = time.time()
+					self.shoot_remain -= 1
+					if self.shoot_remain <= 0:
+						self.game.all_towers.remove(self)
+					else:
+						pygame.draw.ellipse(self.life_bar, pygame.Color("black"), self.life_bar.get_rect())
+						life_percent = self.shoot_remain/self.shoot_max
+						new_color = pygame.Color(int(255-(255*life_percent)),int(255*life_percent),0)
+						pygame.draw.arc(self.life_bar, new_color, self.life_bar.get_rect(), math.pi/2, life_percent*2*math.pi+math.pi/2, 20)
+						#pygame.draw.arc(self.life_bar, new_color, pygame.Rect(self.life_bar.get_rect().left+5, self.life_bar.get_rect().top+5, Tower.LIFE_BAR_RANGE*2-5, Tower.LIFE_BAR_RANGE*2-5), math.pi/2, life_percent*2*math.pi+math.pi/2, 15)
 				else:
-					self.life_bar.fill(pygame.Color("black"))
-					life_percent = self.shoot_remain/self.shoot_max
-					new_bar = pygame.Surface((Tower.LIFE_BAR_SIZE[0]*life_percent,Tower.LIFE_BAR_SIZE[1]))
-					new_color = pygame.Color(int(255-(255*life_percent)),int(255*life_percent),0)
-					new_bar.fill(new_color)
-					self.life_bar.blit(new_bar, (0,0))
+					break

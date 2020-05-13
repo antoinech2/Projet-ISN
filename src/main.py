@@ -146,12 +146,13 @@ class Game():
 				if self.placing_tower.sprite != None:
 					self.placing_tower.sprite.DisplayRange()
 					self.placing_tower.sprite.Display()
+				for current_tower in self.all_towers:
+					current_tower.DisplayLifeBar()
 				self.all_towers.draw(self.screen)
 				self.all_enemies.draw(self.screen)
 				for current_enemy in self.all_enemies:
 					current_enemy.DisplayLifeBar()
 				for current_tower in self.all_towers:
-					current_tower.DisplayLifeBar()
 					if current_tower.rect.collidepoint(pygame.mouse.get_pos()):
 						current_tower.DisplayRange()
 				self.screen.blit(interfaces.RenderRightGUI(self.screen_size, self.health, self.money, len(self.all_towers), len(self.all_enemies), self.ennemies_killed, self.last_fps),(self.screen_size[0]*0.8,0))
