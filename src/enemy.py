@@ -118,4 +118,5 @@ class Enemy(pygame.sprite.Sprite):
 	def Death(self):
 		"Fait mourir l'ennemi (plus de vie)"
 		self.game.money += self.money_gain
+		self.game.ennemies_killed += 1
 		self.has_finished = True

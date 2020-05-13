@@ -38,8 +38,8 @@ class Tower(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 		self.rect.center = (0,0)
 		self.range = 3*Tower.global_ratio*Tower.box_size_pixel[0]
-		self.attack_damage = 50
-		self.attack_cooldown = 2
+		self.attack_damage = 10
+		self.attack_cooldown = 1
 		self.attack_enemies = 1
 		self.last_attack = time.time()
 

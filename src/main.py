@@ -42,6 +42,7 @@ class Game():
 
 		self.health = 2000
 		self.money = 0
+		self.ennemies_killed = 0
 
 #Définition de la fonction principale:
 def __main__():
@@ -81,7 +82,6 @@ def __main__():
 	tower.Tower.Init(path_coords, box_size_pixel, 1)
 	all_towers = pygame.sprite.Group()
 	placing_tower = pygame.sprite.GroupSingle()
-	ennemies_killed = 0
 
 	#Boucle principale
 	while game.is_game_running:
@@ -160,7 +160,7 @@ def __main__():
 			for current_tower in all_towers:
 				if current_tower.rect.collidepoint(pygame.mouse.get_pos()):
 					current_tower.ShowRange(screen, screen_size)
-			screen.blit(interfaces.RenderRightGUI(screen_size, game.health, game.money, len(all_towers), len(all_enemies), ennemies_killed),(screen_size[0]*0.8,0))
+			screen.blit(interfaces.RenderRightGUI(screen_size, game.health, game.money, len(all_towers), len(all_enemies), game.ennemies_killed),(screen_size[0]*0.8,0))
 
 		#Boucle lors de l'écran de fin
 		elif game.current_gui == "game_lost":
