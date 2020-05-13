@@ -26,36 +26,28 @@ class Enemy(pygame.sprite.Sprite):
 	#Définition des constantes globales à la class
 	LIFE_BAR_SIZE = (25,4)
 
-	@staticmethod
-	def Init(path, box_pixel, ratio):
-		"Initialisation des variables globales utiles pour la class Enemy"
-		Enemy.path_coords = path
-		Enemy.box_size_pixel = box_pixel
-		Enemy.global_ratio = ratio
-
 	def __init__(self, game):
 		"Constructeur du nouvel objet ennemi avec un lot de caractéristiques"
 		super().__init__()
+		self.game = game
 		self.max_health = 100
 		self.resistance = 0.9
-		self.speed = 1.5*Enemy.global_ratio
-		self.money_gain = 15
+		self.speed = 1.5*self.game.global_ratio
+		self.money_gain = 5
 
-		self.position_precision = 15*Enemy.global_ratio
+		self.position_precision = 15*self.game.global_ratio
 		self.destination_offset = 0.15
 
-		self.image = pygame.Surface((30*Enemy.global_ratio,30*Enemy.global_ratio))
+		self.image = pygame.Surface((30*self.game.global_ratio,30*self.game.global_ratio))
 		self.image.fill(pygame.Color(random.randint(0,255),random.randint(0,255),random.randint(0,255)))
 		#self.image = pygame.image.load("../res/textures/ennemy/enemy.PNG")
 		self.rect = self.image.get_rect()
-		self.offset = (0.5*(1+self.rect.width/Enemy.box_size_pixel[0]),0.5*(1+self.rect.height/Enemy.box_size_pixel[1]))
-		self.coords = (Enemy.box_size_pixel[0]*(Enemy.path_coords[0][0]-self.offset[0]),Enemy.box_size_pixel[1]*(Enemy.path_coords[0][1]-self.offset[1]))
+		self.offset = (0.5*(1+self.rect.width/self.game.box_size_pixel[0]),0.5*(1+self.rect.height/self.game.box_size_pixel[1]))
+		self.coords = (self.game.box_size_pixel[0]*(self.game.path_coords[0][0]-self.offset[0]),self.game.box_size_pixel[1]*(self.game.path_coords[0][1]-self.offset[1]))
 		self.rect.x = self.coords[0]
 		self.rect.y = self.coords[1]
 		self.current_case_number = 0
-		self.has_finished = False
 		self.current_health = self.max_health
-		self.game = game
 
 		self.life_bar = pygame.Surface(Enemy.LIFE_BAR_SIZE)
 		self.life_bar.fill(pygame.Color("green"))
@@ -67,7 +59,7 @@ class Enemy(pygame.sprite.Sprite):
 		self.rect.x = self.coords[0]
 		self.rect.y = self.coords[1]
 		if math.sqrt((self.coords[0]-self.coords_arrivee[0])**2+(self.coords[1]-self.coords_arrivee[1])**2) < self.position_precision:
-			if self.current_case_number >= len(Enemy.path_coords)-2:
+			if self.current_case_number >= len(self.game.path_coords)-2:
 				self.EndPath()
 			else:
 				self.current_case_number += 1
@@ -75,7 +67,7 @@ class Enemy(pygame.sprite.Sprite):
 	def NewDestination(self):
 		"Calcul de la nouvelle destination (angle) vers la prochaine case"
 		coords_depart = (self.rect.x, self.rect.y)
-		self.coords_arrivee = (Enemy.box_size_pixel[0]*(Enemy.path_coords[self.current_case_number+1][0]-self.offset[0]+random.uniform(-self.destination_offset,self.destination_offset)) , Enemy.box_size_pixel[1]*(Enemy.path_coords[self.current_case_number+1][1]-self.offset[1]+random.uniform(-self.destination_offset,self.destination_offset)))
+		self.coords_arrivee = (self.game.box_size_pixel[0]*(self.game.path_coords[self.current_case_number+1][0]-self.offset[0]+random.uniform(-self.destination_offset,self.destination_offset)) , self.game.box_size_pixel[1]*(self.game.path_coords[self.current_case_number+1][1]-self.offset[1]+random.uniform(-self.destination_offset,self.destination_offset)))
 		direction_angle = math.atan2(self.coords_arrivee[1]-coords_depart[1], self.coords_arrivee[0]-coords_depart[0])
 		self.avance = (math.cos(direction_angle)*self.speed, math.sin(direction_angle)*self.speed)
 	def UpdatePosition(self, ratio):
@@ -88,20 +80,17 @@ class Enemy(pygame.sprite.Sprite):
 		self.speed *= ratio
 	def EndPath(self):
 		"Définit l'état de course de l'ennemi comme terminée"
-		self.has_finished = True
+		self.game.all_enemies.remove(self)
 		self.game.health -= int(self.current_health)
 		#Vérification du Game Over (plus de vie)
 		if self.game.health <= 0:
 			self.game.current_gui = "game_lost"
-	def HasFinished(self):
-		"Retourne l'état de course de l'ennemi"
-		return self.has_finished
 	def GetHealth(self):
 		"Retourne la vie restante de l'ennemi"
 		return self.current_health
-	def DisplayLifeBar(self, dest):
+	def DisplayLifeBar(self):
 		"Affiche la barre de vie de l'ennemi à l'écran"
-		dest.blit(self.life_bar, (self.rect.centerx-0.5*Enemy.LIFE_BAR_SIZE[0],self.rect.y-7))
+		self.game.screen.blit(self.life_bar, (self.rect.centerx-0.5*Enemy.LIFE_BAR_SIZE[0],self.rect.y-7))
 	def TakeDamage(self, damage):
 		"Fait prendre un certain nombre de dommage à l'ennemi"
 		total_damage = self.resistance * damage
@@ -119,4 +108,4 @@ class Enemy(pygame.sprite.Sprite):
 		"Fait mourir l'ennemi (plus de vie)"
 		self.game.money += self.money_gain
 		self.game.ennemies_killed += 1
-		self.has_finished = True
+		self.game.all_enemies.remove(self)
