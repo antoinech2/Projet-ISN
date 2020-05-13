@@ -37,7 +37,7 @@ class Tower(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 		self.rect.center = (0,0)
 		self.range = 3*Tower.global_ratio*Tower.box_size_pixel[0]
-		self.attack_damage = 10
+		self.attack_damage = 1
 		self.attack_cooldown = 100
 		self.attack_enemies = 1
 
@@ -68,13 +68,14 @@ class Tower(pygame.sprite.Sprite):
 		pygame.draw.circle(surface, pygame.Color(63, 127, 191, 128), self.rect.center, self.range)
 		screen.blit(surface, (0,0))
 
-	def Shot(self, all_enemies,):
+	def Shot(self, all_enemies):
 		"Trouve l'ennemi le plus proche pour lui faire des dègâts"
 		nearest_distance = 999999
 		for current_enemy in all_enemies:
-			distance = sqrt((self.rect.center[0] - current_enemy.rect.center[0])^2 + (self.rect.center[1] - current_enemy.rect.center[1])^2)
+			distance = math.sqrt((self.rect.center[0] - current_enemy.rect.center[0])**2 + (self.rect.center[1] - current_enemy.rect.center[1])**2)
 			if distance < self.range :
 				if distance < nearest_distance:
 					nearest_distance = distance
 					nearest_ennemy = current_enemy
-		nearest_ennemy.TakeDamage(self.attack_damage)
+		if nearest_distance != 999999:
+			nearest_ennemy.TakeDamage(self.attack_damage)

@@ -144,6 +144,9 @@ def __main__():
 			#Changement de la couleur de la tour en placement en fonction des collisions
 			for current_tower in placing_tower:
 				current_tower.CursorPlace(pygame.mouse.get_pos(),all_towers, map_rect_list, map_surface)
+			#Attaque des tours déjà placées
+			for current_tower in all_towers:
+				current_tower.Shot(all_enemies)
 
 			#Affichage à l'écran
 			screen.blit(map_surface,(0,0))
