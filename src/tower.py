@@ -16,6 +16,7 @@
 #Importation des modules externes:
 import pygame
 import math
+import time
 ############################################
 
 ############################################
@@ -37,9 +38,10 @@ class Tower(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 		self.rect.center = (0,0)
 		self.range = 3*Tower.global_ratio*Tower.box_size_pixel[0]
-		self.attack_damage = 1
-		self.attack_cooldown = 100
+		self.attack_damage = 50
+		self.attack_cooldown = 2
 		self.attack_enemies = 1
+		self.last_attack = time.time()
 
 	def CursorPlace(self, position, group, rect_list, map_rect):
 		"Calcul de la couleur de la tour en fonction de sa position sur le terrain (disponible ou non)"
@@ -70,12 +72,14 @@ class Tower(pygame.sprite.Sprite):
 
 	def Shot(self, all_enemies):
 		"Trouve l'ennemi le plus proche pour lui faire des dègâts"
-		nearest_distance = 999999
-		for current_enemy in all_enemies:
-			distance = math.sqrt((self.rect.center[0] - current_enemy.rect.center[0])**2 + (self.rect.center[1] - current_enemy.rect.center[1])**2)
-			if distance < self.range :
-				if distance < nearest_distance:
-					nearest_distance = distance
-					nearest_ennemy = current_enemy
-		if nearest_distance != 999999:
-			nearest_ennemy.TakeDamage(self.attack_damage)
+		if self.last_attack + self.attack_cooldown <= time.time():
+			nearest_distance = 999999
+			for current_enemy in all_enemies:
+				distance = math.sqrt((self.rect.center[0] - current_enemy.rect.center[0])**2 + (self.rect.center[1] - current_enemy.rect.center[1])**2)
+				if distance < self.range :
+					if distance < nearest_distance:
+						nearest_distance = distance
+						nearest_ennemy = current_enemy
+			if nearest_distance != 999999:
+				nearest_ennemy.TakeDamage(self.attack_damage)
+				self.last_attack = time.time()
