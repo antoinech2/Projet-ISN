@@ -30,6 +30,19 @@ import interfaces
 ############################################
 
 ############################################
+#Définition de la Class principale pour les constantes de jeu
+class Game():
+	"Class principale"
+
+	def __init__(self):
+		#Initialisation du jeu
+		self.current_gui = "game"
+		self.is_game_running = True
+		self.current_tick = 0
+
+		self.health = 2000
+		self.money = 0
+
 #Définition de la fonction principale:
 def __main__():
 	"Fonction principale"
@@ -46,18 +59,13 @@ def __main__():
 
 	pygame.init() #Démarrage de pygame
 
+	#Initialisation du jeu
+	game = Game()
+
 	#Initialisation de la fenêtre
 	screen_size = DEFAULT_SCREEN_SIZE
 	screen = pygame.display.set_mode(screen_size, pygame.RESIZABLE)
 	pygame.display.set_caption("Tower Defense v0.3")
-
-	#Initialisation du jeu
-	current_gui = "game"
-	is_game_running = True
-	current_tick = 0
-
-	game_health = 2000
-	game_money = 0
 
 	#Génération du chemin aléatoire
 	path_coords = map_generator.CalculateNewPath(MAP_SIZE)
@@ -67,7 +75,7 @@ def __main__():
 	#Initialisation des ennemis
 	enemy.Enemy.Init(path_coords, box_size_pixel, 1)
 	all_enemies = pygame.sprite.Group()
-	all_enemies.add(enemy.Enemy())
+	all_enemies.add(enemy.Enemy(game))
 
 	#Initialisation des tours
 	tower.Tower.Init(path_coords, box_size_pixel, 1)
@@ -76,15 +84,15 @@ def __main__():
 	ennemies_killed = 0
 
 	#Boucle principale
-	while is_game_running:
-		current_tick += 1
+	while game.is_game_running:
+		game.current_tick += 1
 		time.sleep(TICK_TIME)
 
 		#Lecture des événements
 		for event in pygame.event.get():
 			#Quitter le jeu
 			if event.type == pygame.QUIT:
-				is_game_running = False
+				game.is_game_running = False
 			#Redimention de la fenêtre
 			elif event.type == pygame.VIDEORESIZE:
 				diff = (abs(event.w-screen_size[0]),abs(event.h-screen_size[1]))
@@ -106,7 +114,7 @@ def __main__():
 					current_enemy.NewDestination()
 
 			#Evenements lors de la partie
-			if current_gui == "game":
+			if game.current_gui == "game":
 				#Ajout d'une tour avec la touche T
 				if event.type == pygame.KEYDOWN:
 					if event.key == pygame.K_t:
@@ -120,21 +128,17 @@ def __main__():
 							placing_tower.empty()
 
 		#Boucle lors de la partie
-		if current_gui == "game":
+		if game.current_gui == "game":
 
 			#Calcul du tick
 			#Ajout d'un ennemi tous les 100 ticks
-			if current_tick%100 == 0:
-				all_enemies.add(enemy.Enemy())
+			if game.current_tick%100 == 0:
+				all_enemies.add(enemy.Enemy(game))
 			#Avancement des ennemis et suppression des ennemis qui sont au bout du chemin
 			for current_enemy in all_enemies:
-				current_enemy.TakeDamage(random.random(), game_money)
+				#current_enemy.TakeDamage(random.random())
 				if current_enemy.HasFinished():
 					all_enemies.remove(current_enemy)
-					game_health -= int(current_enemy.GetHealth())
-					#Vérification du Game Over (plus de vie)
-					if game_health <= 0:
-						current_gui = "game_lost"
 				else:
 					current_enemy.Move()
 			#Changement de la couleur de la tour en placement en fonction des collisions
@@ -153,10 +157,10 @@ def __main__():
 			for current_tower in all_towers:
 				if current_tower.rect.collidepoint(pygame.mouse.get_pos()):
 					current_tower.ShowRange(screen, screen_size)
-			screen.blit(interfaces.RenderRightGUI(screen_size, game_health, game_money, len(all_towers), len(all_enemies), ennemies_killed),(screen_size[0]*0.8,0))
+			screen.blit(interfaces.RenderRightGUI(screen_size, game.health, game.money, len(all_towers), len(all_enemies), ennemies_killed),(screen_size[0]*0.8,0))
 
 		#Boucle lors de l'écran de fin
-		elif current_gui == "game_lost":
+		elif game.current_gui == "game_lost":
 			screen.fill(pygame.Color("blue"))
 			interfaces.RenderText("Fin de partie.", 80, "red", (screen_size[0]/2, screen_size[1]/4), screen)
 			interfaces.RenderText("Vous n'avez plus de vies.", 50, "yellow", (screen_size[0]/2, screen_size[1]/4+100), screen)
