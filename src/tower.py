@@ -71,7 +71,7 @@ class Tower(pygame.sprite.Sprite):
 		screen.blit(surface, (0,0))
 
 	def Shot(self, all_enemies):
-		"Trouve l'ennemi le plus proche pour lui faire des dègâts"
+		"Trouve l'ennemi le plus proche pour lui faire des dégâts"
 		if self.last_attack + self.attack_cooldown <= time.time():
 			nearest_distance = 999999
 			for current_enemy in all_enemies:
