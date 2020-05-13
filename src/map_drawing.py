@@ -44,7 +44,7 @@ def CreateMapSurface(map_size,path_coords, screen_size):
 	############################################
 	map_surface = pygame.Surface(map_size_pixel)
 	rect_list = []
-	rect_list_ratio = 0.925
+	rect_list_ratio = 0.92
 
 	for column in range (1,map_size[0]+1):
 		for row in range (1,map_size[1]+1):

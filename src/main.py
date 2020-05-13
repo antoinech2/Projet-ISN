@@ -16,7 +16,7 @@
 ############################################
 #Importation des modules externes:
 import pygame
-import random
+import time
 ############################################
 
 ############################################
@@ -40,7 +40,7 @@ class Game():
 	MIN_SCREEN_SIZE = (750,422)
 	MAP_SIZE = (16,9)
 
-	TICK_TIME = 0.01 #Temps d'attente entre deux ticks en secondes
+	TICK_TIME = 0.003 #Temps d'attente entre deux ticks en secondes
 	############################################
 
 	def __init__(self):
@@ -48,6 +48,9 @@ class Game():
 		self.current_gui = "game"
 		self.is_game_running = True
 		self.current_tick = 0
+		self.last_second = time.time()
+		self.current_fps = 0
+		self.last_fps = 0
 
 		self.health = 2000
 		self.money = 100
@@ -74,6 +77,11 @@ class Game():
 		#Boucle principale
 		while self.is_game_running:
 			self.current_tick += 1
+			self.current_fps += 1
+			if self.last_second +1 <= time.time():
+				self.last_second = time.time()
+				self.last_fps = self.current_fps
+				self.current_fps = 0
 			time.sleep(Game.TICK_TIME)
 
 			#Lecture des événements
@@ -136,15 +144,17 @@ class Game():
 				self.screen.blit(self.map_surface,(0,0))
 				self.placing_tower.draw(self.screen)
 				if self.placing_tower.sprite != None:
-					self.placing_tower.sprite.ShowRange()
+					self.placing_tower.sprite.DisplayRange()
+					self.placing_tower.sprite.Display()
 				self.all_towers.draw(self.screen)
 				self.all_enemies.draw(self.screen)
 				for current_enemy in self.all_enemies:
 					current_enemy.DisplayLifeBar()
 				for current_tower in self.all_towers:
+					current_tower.DisplayLifeBar()
 					if current_tower.rect.collidepoint(pygame.mouse.get_pos()):
-						current_tower.ShowRange()
-				self.screen.blit(interfaces.RenderRightGUI(self.screen_size, self.health, self.money, len(self.all_towers), len(self.all_enemies), self.ennemies_killed),(self.screen_size[0]*0.8,0))
+						current_tower.DisplayRange()
+				self.screen.blit(interfaces.RenderRightGUI(self.screen_size, self.health, self.money, len(self.all_towers), len(self.all_enemies), self.ennemies_killed, self.last_fps),(self.screen_size[0]*0.8,0))
 
 			#Boucle lors de l'écran de fin
 			elif self.current_gui == "game_lost":

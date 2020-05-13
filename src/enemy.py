@@ -32,7 +32,7 @@ class Enemy(pygame.sprite.Sprite):
 		self.game = game
 		self.max_health = 100
 		self.resistance = 0.9
-		self.speed = 1.5*self.game.global_ratio
+		self.speed = 1*self.game.global_ratio
 		self.money_gain = 5
 
 		self.position_precision = 15*self.game.global_ratio
@@ -85,9 +85,6 @@ class Enemy(pygame.sprite.Sprite):
 		#Vérification du Game Over (plus de vie)
 		if self.game.health <= 0:
 			self.game.current_gui = "game_lost"
-	def GetHealth(self):
-		"Retourne la vie restante de l'ennemi"
-		return self.current_health
 	def DisplayLifeBar(self):
 		"Affiche la barre de vie de l'ennemi à l'écran"
 		self.game.screen.blit(self.life_bar, (self.rect.centerx-0.5*Enemy.LIFE_BAR_SIZE[0],self.rect.y-7))
