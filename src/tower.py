@@ -27,7 +27,7 @@ import interfaces
 ############################################
 # Définition de la class qui gère les tours:
 class Tower(pygame.sprite.Sprite):
-	LIFE_BAR_RANGE = 35
+	LIFE_BAR_RANGE = 30
 
 	def __init__(self, game):
 		"Définition du constructeur avec toutes les caractéristiques des tours"
@@ -112,6 +112,9 @@ class Tower(pygame.sprite.Sprite):
 						life_percent = self.shoot_remain/self.shoot_max
 						new_color = pygame.Color(int(255-(255*life_percent)),int(255*life_percent),0)
 						pygame.draw.arc(self.life_bar, new_color, self.life_bar.get_rect(), math.pi/2, life_percent*2*math.pi+math.pi/2, 20)
-						#pygame.draw.arc(self.life_bar, new_color, pygame.Rect(self.life_bar.get_rect().left+5, self.life_bar.get_rect().top+5, Tower.LIFE_BAR_RANGE*2-5, Tower.LIFE_BAR_RANGE*2-5), math.pi/2, life_percent*2*math.pi+math.pi/2, 15)
+						pygame.draw.arc(self.life_bar, new_color, pygame.Rect(self.life_bar.get_rect().left+3, self.life_bar.get_rect().top+1, Tower.LIFE_BAR_RANGE*2-4, Tower.LIFE_BAR_RANGE*2), math.pi/2, life_percent*2*math.pi+math.pi/2, 17)
+						pygame.draw.arc(self.life_bar, new_color, pygame.Rect(self.life_bar.get_rect().left+1, self.life_bar.get_rect().top+3, Tower.LIFE_BAR_RANGE*2-4, Tower.LIFE_BAR_RANGE*2), math.pi/2, life_percent*2*math.pi+math.pi/2, 17)
+						pygame.draw.arc(self.life_bar, new_color, pygame.Rect(self.life_bar.get_rect().left+3, self.life_bar.get_rect().top+3, Tower.LIFE_BAR_RANGE*2-4, Tower.LIFE_BAR_RANGE*2), math.pi/2, life_percent*2*math.pi+math.pi/2, 17)
+						pygame.draw.arc(self.life_bar, new_color, pygame.Rect(self.life_bar.get_rect().left+1, self.life_bar.get_rect().top+1, Tower.LIFE_BAR_RANGE*2-4, Tower.LIFE_BAR_RANGE*2), math.pi/2, life_percent*2*math.pi+math.pi/2, 17)
 				else:
 					break
