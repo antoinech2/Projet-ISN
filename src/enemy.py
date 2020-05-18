@@ -29,15 +29,8 @@ class Enemy(pygame.sprite.Sprite):
 	def __init__(self, game):
 		"Constructeur du nouvel objet ennemi avec un lot de caractéristiques"
 		super().__init__()
+		#Global
 		self.game = game
-		self.max_health = 100
-		self.resistance = 0.9
-		self.speed = 1*self.game.global_ratio
-		self.money_gain = 5
-
-		self.position_precision = 15*self.game.global_ratio
-		self.destination_offset = 0.15
-
 		self.image = pygame.Surface((30*self.game.global_ratio,30*self.game.global_ratio))
 		self.image.fill(pygame.Color(random.randint(0,255),random.randint(0,255),random.randint(0,255)))
 		#self.image = pygame.image.load("../res/textures/ennemy/enemy.PNG")
@@ -47,8 +40,23 @@ class Enemy(pygame.sprite.Sprite):
 		self.rect.x = self.coords[0]
 		self.rect.y = self.coords[1]
 		self.current_case_number = 0
+
+		#caractéristiques
+		self.random_max_health_range = 10
+		self.max_health = 100 + random.uniform(-self.random_max_health_range,self.random_max_health_range)
+		self.random_resistance_range = 0.02
+		self.resistance = 0.9 + random.uniform(-self.random_resistance_range,self.random_resistance_range)
+		self.random_speed_range = 0.2
+		self.speed = (1+random.uniform(-self.random_speed_range, self.random_speed_range))*self.game.global_ratio
+		self.random_money_gain_range = 0.8
+		self.money_gain = 5 + random.uniform(-self.random_money_gain_range, self.random_money_gain_range)
 		self.current_health = self.max_health
 
+		#Déplacement
+		self.position_precision = 15*self.game.global_ratio
+		self.destination_offset = 0.15
+
+		#Barre de vie
 		self.life_bar = pygame.Surface(Enemy.LIFE_BAR_SIZE)
 		self.life_bar.fill(pygame.Color("green"))
 
@@ -81,7 +89,7 @@ class Enemy(pygame.sprite.Sprite):
 	def EndPath(self):
 		"Définit l'état de course de l'ennemi comme terminée"
 		self.game.all_enemies.remove(self)
-		self.game.health -= int(self.current_health)
+		self.game.health -= self.current_health
 		#Vérification du Game Over (plus de vie)
 		if self.game.health <= 0:
 			self.game.current_gui = "game_lost"

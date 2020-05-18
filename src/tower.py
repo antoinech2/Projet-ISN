@@ -17,6 +17,7 @@
 import pygame
 import math
 import time
+import random
 ############################################
 
 ############################################
@@ -32,6 +33,7 @@ class Tower(pygame.sprite.Sprite):
 	def __init__(self, game):
 		"Définition du constructeur avec toutes les caractéristiques des tours"
 		super().__init__()
+		#Global
 		self.game = game
 		self.image = pygame.Surface((50*self.game.global_ratio,50*self.game.global_ratio))
 		self.image.fill(pygame.Color("red"))
@@ -39,18 +41,26 @@ class Tower(pygame.sprite.Sprite):
 		self.rect.center = (0,0)
 		self.last_attack = time.time()
 
+		#caractéristiques
 		self.range = int(2*self.game.global_ratio*self.game.box_size_pixel[0])
 		self.attack_damage = 20
+		self.random_attack_damage_range = 3
 		self.attack_cooldown = 1
+		self.random_attack_cooldown_range = 0.2
 		self.attack_enemies = 1
+		self.random_attack_enemies_range = 0
 		self.cost = 15
 		self.shoot_max = 100
+		self.shoot_reduction = 1
+		self.random_shoot_reduction_range = 0
 		self.shoot_remain = self.shoot_max
 
+		#Statistiques
 		self.total_shoot = 0
 		self.total_damage = 0
 		self.total_kill = 0
 
+		#Barre de vie
 		self.life_bar = pygame.Surface((2*Tower.LIFE_BAR_RANGE,2*Tower.LIFE_BAR_RANGE), pygame.SRCALPHA)
 		pygame.draw.ellipse(self.life_bar, pygame.Color("green"), self.life_bar.get_rect())
 
@@ -98,16 +108,17 @@ class Tower(pygame.sprite.Sprite):
 		"Trouve l'ennemi le plus proche pour lui faire des dégâts"
 		if self.last_attack + self.attack_cooldown <= time.time():
 			ennemies_distance = {}
+			attack_enemies_bonus = random.randint(-self.random_attack_enemies_range,self.random_attack_enemies_range)
 			for current_enemy in self.game.all_enemies:
 				distance = math.sqrt((self.rect.center[0] - current_enemy.rect.center[0])**2 + (self.rect.center[1] - current_enemy.rect.center[1])**2)
 				if distance < self.range :
 					ennemies_distance[round(distance,1)] = current_enemy
 			ennemies_attacked = 0
 			for index in sorted(ennemies_distance.keys()):
-				if ennemies_attacked < self.attack_enemies:
+				if ennemies_attacked < self.attack_enemies + attack_enemies_bonus:
 					ennemies_attacked += 1
-					ennemies_distance[index].TakeDamage(self.attack_damage, self)
-					self.last_attack = time.time()
+					ennemies_distance[index].TakeDamage(self.attack_damage + random.uniform(-self.random_attack_damage_range, self.random_attack_damage_range), self)
+					self.last_attack = time.time() + random.uniform(-self.random_attack_cooldown_range,self.random_attack_cooldown_range)
 					self.total_shoot += 1
 					if self.shoot_remain <= 0:
 						self.game.all_towers.remove(self)
@@ -123,4 +134,4 @@ class Tower(pygame.sprite.Sprite):
 				else:
 					break
 			if ennemies_attacked > 0:
-				self.shoot_remain -= 1
+				self.shoot_remain -= self.shoot_reduction + random.uniform(-self.random_shoot_reduction_range,self.random_shoot_reduction_range)
