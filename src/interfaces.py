@@ -49,11 +49,30 @@ def ShowTowerStats(game, tower):
 	RenderText("Réduction de vie par tir: "+str(tower.shoot_reduction)+"±"+str(tower.random_shoot_reduction_range), 15, "black", (150, 100), gui)
 
 	RenderText("Statistiques sur la tour: ", 20, "red", (450, 20), gui)
-	RenderText("Vies: "+str(round(tower.shoot_remain,1))+"/"+str(tower.shoot_max), 15, "black", (450, 40), gui)
+	RenderText("Vies: "+str(round(tower.shoot_remain,1))+"/"+str(tower.shoot_max)+" ("+str(round(tower.shoot_remain/tower.shoot_max*100))+" %)", 15, "black", (450, 40), gui)
 	RenderText("Tirs totaux: "+str(tower.total_shoot), 15, "black", (450, 60), gui)
 	RenderText("Dêgats infligés: "+str(round(tower.total_damage,1)), 15, "black", (450, 80), gui)
 	RenderText("Ennemis éliminés: "+str(tower.total_kill), 15, "black", (450, 100), gui)
 	return gui
+
+def ShowEnnemyStats(game, enemy):
+	gui_size = (0.8*game.screen_size[0],0.2*game.screen_size[1])
+	gui = pygame.Surface(gui_size)
+	gui.fill(pygame.Color("gray"))
+	RenderText("Informations sur l'ennemi: ", 20, "red", (150, 20), gui)
+	RenderText("Résistance: "+str(round(enemy.resistance,2)), 15, "black", (150, 40), gui)
+	RenderText("Vitesse: "+str(round(enemy.speed,2)), 15, "black", (150, 60), gui)
+	RenderText("Gain d'élimination: "+str(round(enemy.money_gain,1)), 15, "black", (150, 80), gui)
+	#RenderText("Réduction de vie par tir: "+str(tower.shoot_reduction)+"±"+str(tower.random_shoot_reduction_range), 15, "black", (150, 100), gui)
+
+	RenderText("Statistiques sur l'ennemi: ", 20, "red", (450, 20), gui)
+	RenderText("Vie: "+str(round(enemy.current_health,1))+"/"+str(round(enemy.max_health,1))+" ("+str(round(enemy.current_health/enemy.max_health*100))+" %)", 15, "black", (450, 40), gui)
+	RenderText("Position: "+str(enemy.current_case_number)+"/"+str(len(game.path_coords)-1), 15, "black", (450, 60), gui)
+	#RenderText("Tirs totaux: "+str(tower.total_shoot), 15, "black", (450, 60), gui)
+	#RenderText("Dêgats infligés: "+str(round(tower.total_damage,1)), 15, "black", (450, 80), gui)
+	#RenderText("Ennemis éliminés: "+str(tower.total_kill), 15, "black", (450, 100), gui)
+	return gui
+
 
 def RenderText(texte, taille, color, coords, surface, centered = True):
 	"Affiche un texte en forme sur une surface"
