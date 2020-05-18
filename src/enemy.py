@@ -88,12 +88,14 @@ class Enemy(pygame.sprite.Sprite):
 	def DisplayLifeBar(self):
 		"Affiche la barre de vie de l'ennemi à l'écran"
 		self.game.screen.blit(self.life_bar, (self.rect.centerx-0.5*Enemy.LIFE_BAR_SIZE[0],self.rect.y-7))
-	def TakeDamage(self, damage):
+	def TakeDamage(self, damage, tower):
 		"Fait prendre un certain nombre de dommage à l'ennemi"
 		total_damage = self.resistance * damage
 		self.current_health -= total_damage
+		tower.total_damage += total_damage
 		if self.current_health <= 0:
 			self.Death()
+			tower.total_kill += 1
 		else:
 			self.life_bar.fill(pygame.Color("black"))
 			life_percent = self.current_health/self.max_health

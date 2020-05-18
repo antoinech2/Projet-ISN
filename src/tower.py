@@ -47,6 +47,10 @@ class Tower(pygame.sprite.Sprite):
 		self.shoot_max = 100
 		self.shoot_remain = self.shoot_max
 
+		self.total_shoot = 0
+		self.total_damage = 0
+		self.total_kill = 0
+
 		self.life_bar = pygame.Surface((2*Tower.LIFE_BAR_RANGE,2*Tower.LIFE_BAR_RANGE), pygame.SRCALPHA)
 		pygame.draw.ellipse(self.life_bar, pygame.Color("green"), self.life_bar.get_rect())
 
@@ -102,9 +106,9 @@ class Tower(pygame.sprite.Sprite):
 			for index in sorted(ennemies_distance.keys()):
 				if ennemies_attacked < self.attack_enemies:
 					ennemies_attacked += 1
-					ennemies_distance[index].TakeDamage(self.attack_damage)
+					ennemies_distance[index].TakeDamage(self.attack_damage, self)
 					self.last_attack = time.time()
-					self.shoot_remain -= 1
+					self.total_shoot += 1
 					if self.shoot_remain <= 0:
 						self.game.all_towers.remove(self)
 					else:
@@ -118,3 +122,5 @@ class Tower(pygame.sprite.Sprite):
 						pygame.draw.arc(self.life_bar, new_color, pygame.Rect(self.life_bar.get_rect().left+1, self.life_bar.get_rect().top+1, Tower.LIFE_BAR_RANGE*2-4, Tower.LIFE_BAR_RANGE*2), math.pi/2, life_percent*2*math.pi+math.pi/2, 17)
 				else:
 					break
+			if ennemies_attacked > 0:
+				self.shoot_remain -= 1

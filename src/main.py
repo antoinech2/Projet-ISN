@@ -40,7 +40,7 @@ class Game():
 	MIN_SCREEN_SIZE = (750,422)
 	MAP_SIZE = (16,9)
 
-	TICK_TIME = 0.003 #Temps d'attente entre deux ticks en secondes
+	TICK_TIME = 0.0085 #Temps d'attente entre deux ticks (en secondes)
 	############################################
 
 	def __init__(self):
@@ -152,11 +152,12 @@ class Game():
 				self.all_enemies.draw(self.screen)
 				for current_enemy in self.all_enemies:
 					current_enemy.DisplayLifeBar()
+				self.screen.blit(interfaces.RenderBottomGUI(self),(0,self.screen_size[1]*0.8))
+				self.screen.blit(interfaces.RenderRightGUI(self.screen_size, self.health, self.money, len(self.all_towers), len(self.all_enemies), self.ennemies_killed, self.last_fps),(self.screen_size[0]*0.8,0))
 				for current_tower in self.all_towers:
 					if current_tower.rect.collidepoint(pygame.mouse.get_pos()):
 						current_tower.DisplayRange()
-				self.screen.blit(interfaces.RenderRightGUI(self.screen_size, self.health, self.money, len(self.all_towers), len(self.all_enemies), self.ennemies_killed, self.last_fps),(self.screen_size[0]*0.8,0))
-
+						self.screen.blit(interfaces.ShowTowerStats(self, current_tower), (0,self.screen_size[1]*0.8))
 			#Boucle lors de l'écran de fin
 			elif self.current_gui == "game_lost":
 				self.screen.fill(pygame.Color("blue"))

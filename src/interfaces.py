@@ -30,10 +30,45 @@ def RenderRightGUI(screen_size, game_health, game_money, number_tower, number_en
 	RenderText("Nombre d'ennemis vaincus: "+str(number_kill), 13, "brown", (gui_size[0]-100, 160), gui)
 	return gui
 
+def RenderBottomGUI(game):
+	"Affichage de l'interface latérale droite"
+	gui_size = (0.8*game.screen_size[0],0.2*game.screen_size[1])
+	gui = pygame.Surface(gui_size)
+	gui.fill(pygame.Color("gray"))
+	# RenderText("Nombre d'ennemis vaincus: "+str(number_kill), 13, "brown", (gui_size[0]-100, 160), gui)
+	return gui
+
+def ShowTowerStats(game, tower):
+	gui_size = (0.8*game.screen_size[0],0.2*game.screen_size[1])
+	gui = pygame.Surface(gui_size)
+	gui.fill(pygame.Color("gray"))
+	RenderText("Informations sur la tour: ", 20, "red", (150, 20), gui)
+	RenderText("Dégâts: "+str(tower.attack_damage), 15, "black", (150, 40), gui)
+	RenderText("Délai d'attaque: "+str(tower.attack_cooldown), 15, "black", (150, 60), gui)
+	RenderText("Attaques simultanées: "+str(tower.attack_enemies), 15, "black", (150, 80), gui)
+	RenderText("Coût d'achat: "+str(tower.cost), 15, "black", (150, 100), gui)
+
+	RenderText("Statistiques sur la tour: ", 20, "red", (450, 20), gui)
+	RenderText("Vies: "+str(tower.shoot_remain)+"/"+str(tower.shoot_max), 15, "black", (450, 40), gui)
+	RenderText("Tirs totaux: "+str(tower.total_shoot), 15, "black", (450, 60), gui)
+	RenderText("Dêgats infligés: "+str(tower.total_damage), 15, "black", (450, 80), gui)
+	RenderText("Ennemis éliminés: "+str(tower.total_kill), 15, "black", (450, 100), gui)
+	return gui
+
 def RenderText(texte, taille, color, coords, surface, centered = True):
 	"Affiche un texte en forme sur une surface"
-	text = pygame.font.Font("../res/fonts/Righteous-Regular.ttf", taille).render(texte, True, pygame.Color(color))
+	# pygame.font.Font("../res/fonts/Righteous-Regular.ttf", taille)
+	text = font[taille].render(texte, True, pygame.Color(color))
 	rect = text.get_rect()
 	if centered:
 		rect.center = coords
 	surface.blit(text,rect)
+
+def InitFonts():
+	global font
+	pygame.font.init()
+	font = []
+	for number in range(100):
+		font.append(pygame.font.Font("../res/fonts/Righteous-Regular.ttf", number))
+
+InitFonts()
