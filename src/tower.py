@@ -117,7 +117,8 @@ class Tower(pygame.sprite.Sprite):
 			for index in sorted(ennemies_distance.keys()):
 				if ennemies_attacked < self.attack_enemies + attack_enemies_bonus:
 					ennemies_attacked += 1
-					ennemies_distance[index].TakeDamage(self.attack_damage + random.uniform(-self.random_attack_damage_range, self.random_attack_damage_range), self)
+					self.game.all_projectiles.add(Projectile(self, ennemies_distance[index]))
+					#ennemies_distance[index].TakeDamage(self.attack_damage + random.uniform(-self.random_attack_damage_range, self.random_attack_damage_range), self)
 					self.last_attack = time.time() + random.uniform(-self.random_attack_cooldown_range,self.random_attack_cooldown_range)
 					self.total_shoot += 1
 					if self.shoot_remain <= 0:
@@ -135,3 +136,31 @@ class Tower(pygame.sprite.Sprite):
 					break
 			if ennemies_attacked > 0:
 				self.shoot_remain -= self.shoot_reduction + random.uniform(-self.random_shoot_reduction_range,self.random_shoot_reduction_range)
+
+class Projectile(pygame.sprite.Sprite):
+	def __init__(self, tower, target):
+		"Définition du constructeur avec toutes les caractéristiques des projectiles"
+		super().__init__()
+		#Global
+		self.tower = tower
+		self.target = target
+
+		self.image = pygame.Surface((10*self.tower.game.global_ratio,5*self.tower.game.global_ratio))
+		self.image.fill(pygame.Color("red"))
+		self.rect = self.image.get_rect()
+		self.coords = [self.tower.rect.centerx, self.tower.rect.centery]
+		self.rect.center = self.coords
+
+		#caractéristiques
+		self.random_speed_range = 0.5
+		self.speed = 2.5 + random.uniform(-self.random_speed_range, self.random_speed_range)
+
+	def Move(self):
+		angle = math.atan2(self.target.rect.centery - self.rect.centery, self.target.rect.centerx - self.rect.centerx)
+		self.coords[0] += self.speed*math.cos(angle)
+		self.coords[1] += self.speed*math.sin(angle)
+		self.rect[0] = self.coords[0]
+		self.rect[1] = self.coords[1]
+		if math.hypot(self.target.rect.centerx - self.rect.centerx, self.target.rect.centery - self.rect.centery) < 0.5*self.target.rect.width:
+			self.target.TakeDamage(self.tower.attack_damage + random.uniform(-self.tower.random_attack_damage_range, self.tower.random_attack_damage_range), self.tower)
+			self.tower.game.all_projectiles.remove(self)

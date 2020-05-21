@@ -60,6 +60,7 @@ class Game():
 		self.all_enemies = pygame.sprite.Group()
 		#Initialisation des tours
 		self.all_towers = pygame.sprite.Group()
+		self.all_projectiles = pygame.sprite.Group()
 		self.placing_tower = pygame.sprite.GroupSingle()
 
 		self.screen_size = Game.DEFAULT_SCREEN_SIZE
@@ -139,6 +140,8 @@ class Game():
 				#Attaque des tours déjà placées
 				for current_tower in self.all_towers:
 					current_tower.Shot()
+				for current_projectile in self.all_projectiles:
+					current_projectile.Move()
 
 				#Affichage à l'écran
 				self.screen.blit(self.map_surface,(0,0))
@@ -150,6 +153,7 @@ class Game():
 					current_tower.DisplayLifeBar()
 				self.all_towers.draw(self.screen)
 				self.all_enemies.draw(self.screen)
+				self.all_projectiles.draw(self.screen)
 				self.screen.blit(interfaces.RenderBottomGUI(self),(0,self.screen_size[1]*0.8))
 				self.screen.blit(interfaces.RenderRightGUI(self.screen_size, self.health, self.money, len(self.all_towers), len(self.all_enemies), self.ennemies_killed, self.last_fps),(self.screen_size[0]*0.8,0))
 				for current_enemy in self.all_enemies:

@@ -25,15 +25,16 @@ class Enemy(pygame.sprite.Sprite):
 	"Définition de la class Ennemis"
 	#Définition des constantes globales à la class
 	LIFE_BAR_SIZE = (25,4)
+	IMAGE = pygame.transform.scale(pygame.image.load("../res/textures/enemy/virus_rouge.png"), (40,40))
 
 	def __init__(self, game):
 		"Constructeur du nouvel objet ennemi avec un lot de caractéristiques"
 		super().__init__()
 		#Global
 		self.game = game
-		self.image = pygame.Surface((30*self.game.global_ratio,30*self.game.global_ratio))
-		self.image.fill(pygame.Color(random.randint(0,255),random.randint(0,255),random.randint(0,255)))
-		#self.image = pygame.image.load("../res/textures/ennemy/enemy.PNG")
+		#self.image = pygame.Surface((30*self.game.global_ratio,30*self.game.global_ratio))
+		#self.image.fill(pygame.Color(random.randint(0,255),random.randint(0,255),random.randint(0,255)))
+		self.image = Enemy.IMAGE
 		self.rect = self.image.get_rect()
 		self.offset = (0.5*(1+self.rect.width/self.game.box_size_pixel[0]),0.5*(1+self.rect.height/self.game.box_size_pixel[1]))
 		self.coords = (self.game.box_size_pixel[0]*(self.game.path_coords[0][0]-self.offset[0]),self.game.box_size_pixel[1]*(self.game.path_coords[0][1]-self.offset[1]))
