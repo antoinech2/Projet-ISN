@@ -40,7 +40,7 @@ class Game():
 	MIN_SCREEN_SIZE = (750,422)
 	MAP_SIZE = (16,9)
 
-	TICK_TIME = 0.0085 #Temps d'attente entre deux ticks (en secondes)
+	TICK_TIME = 0.008 #Temps d'attente entre deux ticks (en secondes)
 	############################################
 
 	def __init__(self):
@@ -114,7 +114,7 @@ class Game():
 					#Ajout d'une tour avec la touche T
 					if event.type == pygame.KEYDOWN:
 						if event.key == pygame.K_t:
-							self.placing_tower.add(tower.Tower(self))
+							self.placing_tower.add(tower.Tower(self, 0))
 					#Placement de la tour avec le clic de la souris
 					elif event.type == pygame.MOUSEBUTTONDOWN:
 						if self.placing_tower.sprite != None:
@@ -129,7 +129,7 @@ class Game():
 				#Calcul du tick
 				#Ajout d'un ennemi tous les 100 ticks
 				if self.current_tick%100 == 0:
-					self.all_enemies.add(enemy.Enemy(self))
+					self.all_enemies.add(enemy.Enemy(self, 0))
 				#Avancement des ennemis et suppression des ennemis qui sont au bout du chemin
 				for current_enemy in self.all_enemies:
 					#current_enemy.TakeDamage(random.random())

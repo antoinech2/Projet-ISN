@@ -18,6 +18,9 @@ import pygame
 import math
 import time
 import random
+from sys import path
+path.append("../res/data/")
+import tower_data
 ############################################
 
 ############################################
@@ -28,31 +31,33 @@ import interfaces
 ############################################
 # Définition de la class qui gère les tours:
 class Tower(pygame.sprite.Sprite):
-	LIFE_BAR_RANGE = 30
-
-	def __init__(self, game):
+	def __init__(self, game, tower_type):
 		"Définition du constructeur avec toutes les caractéristiques des tours"
 		super().__init__()
 		#Global
+		data = tower_data.towers[tower_type]
 		self.game = game
-		self.image = pygame.Surface((50*self.game.global_ratio,50*self.game.global_ratio))
-		self.image.fill(pygame.Color("red"))
+		#self.image = pygame.Surface((50*self.game.global_ratio,50*self.game.global_ratio))
+		#self.image.fill(pygame.Color("red"))
+		self.default_image = pygame.transform.scale(pygame.image.load(data["image_path"]), data["image_size"])
+		self.image = self.default_image
 		self.rect = self.image.get_rect()
 		self.rect.center = (0,0)
 		self.last_attack = time.time()
 
 		#caractéristiques
-		self.range = int(2*self.game.global_ratio*self.game.box_size_pixel[0])
-		self.attack_damage = 20
-		self.random_attack_damage_range = 3
-		self.attack_cooldown = 1
-		self.random_attack_cooldown_range = 0.2
-		self.attack_enemies = 1
-		self.random_attack_enemies_range = 0
-		self.cost = 15
-		self.shoot_max = 100
-		self.shoot_reduction = 1
-		self.random_shoot_reduction_range = 0
+		self.name = data["name"]
+		self.range = int(data["range"]*self.game.global_ratio*self.game.box_size_pixel[0])
+		self.attack_damage = data["attack_damage"][0]
+		self.random_attack_damage_range = data["attack_damage"][1]
+		self.attack_cooldown = data["attack_cooldown"][0]
+		self.random_attack_cooldown_range = data["attack_cooldown"][1]
+		self.attack_enemies = data["attack_enemies"][0]
+		self.random_attack_enemies_range = data["attack_enemies"][1]
+		self.cost = data["cost"]
+		self.shoot_max = data["shoot_max"]
+		self.shoot_reduction = data["shoot_reduction"][0]
+		self.random_shoot_reduction_range = data["shoot_reduction"][1]
 		self.shoot_remain = self.shoot_max
 
 		#Statistiques
@@ -61,7 +66,8 @@ class Tower(pygame.sprite.Sprite):
 		self.total_kill = 0
 
 		#Barre de vie
-		self.life_bar = pygame.Surface((2*Tower.LIFE_BAR_RANGE,2*Tower.LIFE_BAR_RANGE), pygame.SRCALPHA)
+		self.life_bar_range = 30
+		self.life_bar = pygame.Surface((2*self.life_bar_range,2*self.life_bar_range), pygame.SRCALPHA)
 		pygame.draw.ellipse(self.life_bar, pygame.Color("green"), self.life_bar.get_rect())
 
 	def CursorPlace(self, position):
@@ -74,7 +80,8 @@ class Tower(pygame.sprite.Sprite):
 			else:
 				collide = pygame.sprite.spritecollide(self,self.game.all_towers, False)
 				if collide == [] and self.rect.collidelist(self.game.map_rect_list) == -1:
-					self.image.fill(pygame.Color("green"))
+					#pygame.image = self.default_image
+					pygame.draw.rect(self.image, pygame.Color(255,0,0,120), (0,0,self.rect.width, self.rect.height))
 				else:
 					self.image.fill(pygame.Color("red"))
 		else:
@@ -102,7 +109,7 @@ class Tower(pygame.sprite.Sprite):
 
 	def DisplayLifeBar(self):
 		"Affiche la barre de vie de l'ennemi à l'écran"
-		self.game.screen.blit(self.life_bar, (self.rect.centerx-Tower.LIFE_BAR_RANGE,self.rect.centery-Tower.LIFE_BAR_RANGE))
+		self.game.screen.blit(self.life_bar, (self.rect.centerx-self.life_bar_range,self.rect.centery-self.life_bar_range))
 
 	def Shot(self):
 		"Trouve l'ennemi le plus proche pour lui faire des dégâts"
@@ -128,10 +135,10 @@ class Tower(pygame.sprite.Sprite):
 						life_percent = self.shoot_remain/self.shoot_max
 						new_color = pygame.Color(int(255-(255*life_percent)),int(255*life_percent),0)
 						pygame.draw.arc(self.life_bar, new_color, self.life_bar.get_rect(), math.pi/2, life_percent*2*math.pi+math.pi/2, 20)
-						pygame.draw.arc(self.life_bar, new_color, pygame.Rect(self.life_bar.get_rect().left+3, self.life_bar.get_rect().top+1, Tower.LIFE_BAR_RANGE*2-4, Tower.LIFE_BAR_RANGE*2), math.pi/2, life_percent*2*math.pi+math.pi/2, 17)
-						pygame.draw.arc(self.life_bar, new_color, pygame.Rect(self.life_bar.get_rect().left+1, self.life_bar.get_rect().top+3, Tower.LIFE_BAR_RANGE*2-4, Tower.LIFE_BAR_RANGE*2), math.pi/2, life_percent*2*math.pi+math.pi/2, 17)
-						pygame.draw.arc(self.life_bar, new_color, pygame.Rect(self.life_bar.get_rect().left+3, self.life_bar.get_rect().top+3, Tower.LIFE_BAR_RANGE*2-4, Tower.LIFE_BAR_RANGE*2), math.pi/2, life_percent*2*math.pi+math.pi/2, 17)
-						pygame.draw.arc(self.life_bar, new_color, pygame.Rect(self.life_bar.get_rect().left+1, self.life_bar.get_rect().top+1, Tower.LIFE_BAR_RANGE*2-4, Tower.LIFE_BAR_RANGE*2), math.pi/2, life_percent*2*math.pi+math.pi/2, 17)
+						pygame.draw.arc(self.life_bar, new_color, pygame.Rect(self.life_bar.get_rect().left+3, self.life_bar.get_rect().top+1, self.life_bar_range*2-4, self.life_bar_range*2), math.pi/2, life_percent*2*math.pi+math.pi/2, 17)
+						pygame.draw.arc(self.life_bar, new_color, pygame.Rect(self.life_bar.get_rect().left+1, self.life_bar.get_rect().top+3, self.life_bar_range*2-4, self.life_bar_range*2), math.pi/2, life_percent*2*math.pi+math.pi/2, 17)
+						pygame.draw.arc(self.life_bar, new_color, pygame.Rect(self.life_bar.get_rect().left+3, self.life_bar.get_rect().top+3, self.life_bar_range*2-4, self.life_bar_range*2), math.pi/2, life_percent*2*math.pi+math.pi/2, 17)
+						pygame.draw.arc(self.life_bar, new_color, pygame.Rect(self.life_bar.get_rect().left+1, self.life_bar.get_rect().top+1, self.life_bar_range*2-4, self.life_bar_range*2), math.pi/2, life_percent*2*math.pi+math.pi/2, 17)
 				else:
 					break
 			if ennemies_attacked > 0:

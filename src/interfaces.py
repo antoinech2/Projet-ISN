@@ -32,14 +32,14 @@ def RenderRightGUI(screen_size, game_health, game_money, number_tower, number_en
 
 def RenderBottomGUI(game):
 	"Affichage de l'interface latérale droite"
-	gui_size = (0.8*game.screen_size[0],0.2*game.screen_size[1])
+	gui_size = (0.8*game.screen_size[0]+1,0.2*game.screen_size[1]+1)
 	gui = pygame.Surface(gui_size)
 	gui.fill(pygame.Color("gray"))
 	# RenderText("Nombre d'ennemis vaincus: "+str(number_kill), 13, "brown", (gui_size[0]-100, 160), gui)
 	return gui
 
 def ShowTowerStats(game, tower):
-	gui_size = (0.8*game.screen_size[0],0.2*game.screen_size[1])
+	gui_size = (0.8*game.screen_size[0]+1,0.2*game.screen_size[1]+1)
 	gui = pygame.Surface(gui_size)
 	gui.fill(pygame.Color("gray"))
 	RenderText("Informations sur la tour: ", 20, "red", (150, 20), gui)
@@ -56,7 +56,7 @@ def ShowTowerStats(game, tower):
 	return gui
 
 def ShowEnnemyStats(game, enemy):
-	gui_size = (0.8*game.screen_size[0],0.2*game.screen_size[1])
+	gui_size = (0.8*game.screen_size[0]+1,0.2*game.screen_size[1]+1)
 	gui = pygame.Surface(gui_size)
 	gui.fill(pygame.Color("gray"))
 	RenderText("Informations sur l'ennemi: ", 20, "red", (150, 20), gui)

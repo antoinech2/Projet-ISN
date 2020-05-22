@@ -17,24 +17,24 @@
 import pygame
 import math
 import random
+from sys import path
+path.append("../res/data/")
+import enemy_data
 ############################################
 
 ############################################
 # Définition de la class qui gère les ennemis:
 class Enemy(pygame.sprite.Sprite):
 	"Définition de la class Ennemis"
-	#Définition des constantes globales à la class
-	LIFE_BAR_SIZE = (25,4)
-	IMAGE = pygame.transform.scale(pygame.image.load("../res/textures/enemy/virus_rouge.png"), (40,40))
-
-	def __init__(self, game):
+	def __init__(self, game, enemy_type):
 		"Constructeur du nouvel objet ennemi avec un lot de caractéristiques"
 		super().__init__()
+		data = enemy_data.enemies[enemy_type]
 		#Global
 		self.game = game
 		#self.image = pygame.Surface((30*self.game.global_ratio,30*self.game.global_ratio))
 		#self.image.fill(pygame.Color(random.randint(0,255),random.randint(0,255),random.randint(0,255)))
-		self.image = Enemy.IMAGE
+		self.image = pygame.transform.scale(pygame.image.load(data["image_path"]), data["image_size"])
 		self.rect = self.image.get_rect()
 		self.offset = (0.5*(1+self.rect.width/self.game.box_size_pixel[0]),0.5*(1+self.rect.height/self.game.box_size_pixel[1]))
 		self.coords = (self.game.box_size_pixel[0]*(self.game.path_coords[0][0]-self.offset[0]),self.game.box_size_pixel[1]*(self.game.path_coords[0][1]-self.offset[1]))
@@ -43,14 +43,15 @@ class Enemy(pygame.sprite.Sprite):
 		self.current_case_number = 0
 
 		#caractéristiques
-		self.random_max_health_range = 10
-		self.max_health = 100 + random.uniform(-self.random_max_health_range,self.random_max_health_range)
-		self.random_resistance_range = 0.02
-		self.resistance = 0.9 + random.uniform(-self.random_resistance_range,self.random_resistance_range)
-		self.random_speed_range = 0.2
-		self.speed = (1+random.uniform(-self.random_speed_range, self.random_speed_range))*self.game.global_ratio
-		self.random_money_gain_range = 0.8
-		self.money_gain = 5 + random.uniform(-self.random_money_gain_range, self.random_money_gain_range)
+		self.name = data["name"]
+		self.random_max_health_range = data["max_health"][1]
+		self.max_health = data["max_health"][0] + random.uniform(-self.random_max_health_range,self.random_max_health_range)
+		self.random_resistance_range = data["resistance"][1]
+		self.resistance = data["resistance"][0] + random.uniform(-self.random_resistance_range,self.random_resistance_range)
+		self.random_speed_range = data["speed"][1]
+		self.speed = (data["speed"][0]+random.uniform(-self.random_speed_range, self.random_speed_range))*self.game.global_ratio
+		self.random_money_gain_range = data["gain"][1]
+		self.money_gain = data["gain"][0] + random.uniform(-self.random_money_gain_range, self.random_money_gain_range)
 		self.current_health = self.max_health
 
 		#Déplacement
@@ -58,7 +59,8 @@ class Enemy(pygame.sprite.Sprite):
 		self.destination_offset = 0.15
 
 		#Barre de vie
-		self.life_bar = pygame.Surface(Enemy.LIFE_BAR_SIZE)
+		self.life_bar_size = data["life_bar_size"]
+		self.life_bar = pygame.Surface(self.life_bar_size)
 		self.life_bar.fill(pygame.Color("green"))
 
 		self.NewDestination()
@@ -96,7 +98,7 @@ class Enemy(pygame.sprite.Sprite):
 			self.game.current_gui = "game_lost"
 	def DisplayLifeBar(self):
 		"Affiche la barre de vie de l'ennemi à l'écran"
-		self.game.screen.blit(self.life_bar, (self.rect.centerx-0.5*Enemy.LIFE_BAR_SIZE[0],self.rect.y-7))
+		self.game.screen.blit(self.life_bar, (self.rect.centerx-0.5*self.life_bar_size[0],self.rect.y-7))
 	def TakeDamage(self, damage, tower):
 		"Fait prendre un certain nombre de dommage à l'ennemi"
 		total_damage = self.resistance * damage
@@ -108,7 +110,7 @@ class Enemy(pygame.sprite.Sprite):
 		else:
 			self.life_bar.fill(pygame.Color("black"))
 			life_percent = self.current_health/self.max_health
-			new_bar = pygame.Surface((Enemy.LIFE_BAR_SIZE[0]*life_percent,Enemy.LIFE_BAR_SIZE[1]))
+			new_bar = pygame.Surface((self.life_bar_size[0]*life_percent,self.life_bar_size[1]))
 			new_color = pygame.Color(int(255-(255*life_percent)),int(255*life_percent),0)
 			new_bar.fill(new_color)
 			self.life_bar.blit(new_bar, (0,0))
