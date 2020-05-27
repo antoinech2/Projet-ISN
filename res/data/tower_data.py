@@ -17,5 +17,5 @@ towers = [
 "shoot_max" : 100,
 "shoot_reduction": (1,0),
 "cost" : 15,
-"life_bar_range" : 30
+"life_bar_range" : 22
 }]
