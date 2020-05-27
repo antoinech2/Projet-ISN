@@ -7,7 +7,7 @@
 # Licence: Aucune
 # Version: 0.4.0-InDev
 #
-# Description: Ce fichier contient l'objet qui gère les tours du jeu
+# Description: Ce fichier contient l'objet qui gère les tours et les projectiles du jeu
 # Il contient toutes les méthodes pour ajouter et placer des tours sur la map
 # ainsi que le tir des tours sur les ennemis.
 ############################################
@@ -39,8 +39,7 @@ class Tower(pygame.sprite.Sprite):
 		self.game = game
 		#self.image = pygame.Surface((50*self.game.global_ratio,50*self.game.global_ratio))
 		#self.image.fill(pygame.Color("red"))
-		self.default_image = pygame.transform.scale(pygame.image.load(data["image_path"]), data["image_size"])
-		self.image = self.default_image
+		self.image = pygame.transform.scale(pygame.image.load(data["image_path"]), data["image_size"])
 		self.rect = self.image.get_rect()
 		self.rect.center = (0,0)
 		self.last_attack = time.time()
@@ -48,6 +47,7 @@ class Tower(pygame.sprite.Sprite):
 		#caractéristiques
 		self.name = data["name"]
 		self.range = int(data["range"]*self.game.global_ratio*self.game.box_size_pixel[0])
+		self.radius = int(0.5*data["image_size"][0])
 		self.attack_damage = data["attack_damage"][0]
 		self.random_attack_damage_range = data["attack_damage"][1]
 		self.attack_cooldown = data["attack_cooldown"][0]
@@ -66,28 +66,33 @@ class Tower(pygame.sprite.Sprite):
 		self.total_kill = 0
 
 		#Barre de vie
-		self.life_bar_range = 30
+		self.life_bar_range = data["life_bar_range"]
 		self.life_bar = pygame.Surface((2*self.life_bar_range,2*self.life_bar_range), pygame.SRCALPHA)
 		pygame.draw.ellipse(self.life_bar, pygame.Color("green"), self.life_bar.get_rect())
+
+		#Couleur de position
+		self.placement_color = pygame.Surface(data["image_size"], pygame.SRCALPHA)
+		pygame.draw.circle(self.placement_color,pygame.Color("red"),self.placement_color.get_rect().center, self.radius)
 
 	def CursorPlace(self, position):
 		"Calcul de la couleur de la tour en fonction de sa position sur le terrain (disponible ou non)"
 		if self.game.map_surface.get_rect().collidepoint(position):
 			self.rect.center = (position[0],position[1])
 			if self.game.money <= self.cost:
-				self.image.fill(pygame.Color("brown"))
+				pygame.draw.circle(self.placement_color,pygame.Color(158, 101, 32, 50),self.placement_color.get_rect().center, self.radius)
 				interfaces.RenderText("Fonds insuffisants", 15, "red", self.rect.center, self.game.screen)
 			else:
-				collide = pygame.sprite.spritecollide(self,self.game.all_towers, False)
+				collide = pygame.sprite.spritecollide(self,self.game.all_towers, False, pygame.sprite.collide_circle)
 				if collide == [] and self.rect.collidelist(self.game.map_rect_list) == -1:
-					#pygame.image = self.default_image
-					pygame.draw.rect(self.image, pygame.Color(255,0,0,120), (0,0,self.rect.width, self.rect.height))
+					#pygame.draw.rect(self.image, pygame.Color(255,0,0,120), (0,0,self.rect.width, self.rect.height))
+					pygame.draw.circle(self.placement_color,pygame.Color(0,255,0,50),self.placement_color.get_rect().center, self.radius)
 				else:
-					self.image.fill(pygame.Color("red"))
+					pygame.draw.circle(self.placement_color,pygame.Color(255,0,0,50),self.placement_color.get_rect().center, self.radius)
 		else:
 			self.rect.center = (-100,-100)
 
 	def Display(self):
+		self.game.screen.blit(self.placement_color, self.rect.topleft)
 		if self.game.money <= self.cost:
 			interfaces.RenderText("Fonds insuffisants", 15, "red", (self.rect.center[0],self.rect.center[1]-10), self.game.screen)
 
@@ -95,10 +100,10 @@ class Tower(pygame.sprite.Sprite):
 		"Place la tour à l'endroit sélectionné au clic de la souris"
 		if self.game.map_surface.get_rect().collidepoint(position):
 			self.rect.center = (position[0],position[1])
-			collide = pygame.sprite.spritecollide(self,self.game.all_towers, False)
+			collide = pygame.sprite.spritecollide(self,self.game.all_towers, False, pygame.sprite.collide_circle)
 			if collide == [] and self.rect.collidelist(self.game.map_rect_list) == -1 and self.game.money >= self.cost:
 				self.game.money -= self.cost
-				self.image.fill(pygame.Color("blue"))
+				#self.image.fill(pygame.Color("blue"))
 				return self
 
 	def DisplayRange(self):

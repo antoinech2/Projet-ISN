@@ -25,7 +25,6 @@ import map_generator
 import map_drawing
 import enemy
 import tower
-import time
 import interfaces
 ############################################
 
