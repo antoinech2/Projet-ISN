@@ -26,6 +26,7 @@ import map_drawing
 import enemy
 import tower
 import interfaces
+import vague
 ############################################
 
 ############################################
@@ -72,6 +73,8 @@ class Game():
 		self.path_coords = map_generator.CalculateNewPath(Game.MAP_SIZE)
 		#Génération graphique du rendu de la carte
 		self.map_surface, self.box_size_pixel, self.map_rect_list = map_drawing.CreateMapSurface(Game.MAP_SIZE,self.path_coords, self.screen_size)
+
+		self.vague = vague.Vague(self)
 
 	def Run(self):
 		#Boucle principale
@@ -127,8 +130,9 @@ class Game():
 
 				#Calcul du tick
 				#Ajout d'un ennemi tous les 100 ticks
-				if self.current_tick%100 == 0:
-					self.all_enemies.add(enemy.Enemy(self, 0))
+				#if self.current_tick%100 == 0:
+				#	self.all_enemies.add(enemy.Enemy(self, 0))
+				self.vague.CalcVague()
 				#Avancement des ennemis et suppression des ennemis qui sont au bout du chemin
 				for current_enemy in self.all_enemies:
 					#current_enemy.TakeDamage(random.random())
@@ -154,7 +158,7 @@ class Game():
 				self.all_enemies.draw(self.screen)
 				self.all_projectiles.draw(self.screen)
 				self.screen.blit(interfaces.RenderBottomGUI(self),(0,self.screen_size[1]*0.8))
-				self.screen.blit(interfaces.RenderRightGUI(self.screen_size, self.health, self.money, len(self.all_towers), len(self.all_enemies), self.ennemies_killed, self.last_fps),(self.screen_size[0]*0.8,0))
+				self.screen.blit(interfaces.RenderRightGUI(self),(self.screen_size[0]*0.8,0))
 				for current_enemy in self.all_enemies:
 					current_enemy.DisplayLifeBar()
 					if current_enemy.rect.collidepoint(pygame.mouse.get_pos()):

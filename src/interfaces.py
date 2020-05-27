@@ -15,19 +15,27 @@
 ############################################
 #Importation des modules externes:
 import pygame
+import time
 ############################################
 
-def RenderRightGUI(screen_size, game_health, game_money, number_tower, number_ennemis, number_kill, fps):
+def RenderRightGUI(game):
 	"Affichage de l'interface latérale droite"
-	gui_size = (0.2*screen_size[0],screen_size[1])
+	gui_size = (0.2*game.screen_size[0],game.screen_size[1])
 	gui = pygame.Surface(gui_size)
 	gui.fill(pygame.Color("gray"))
-	RenderText("FPS: "+str(fps), 10, "red", (gui_size[0]-30, 10), gui)
-	RenderText("Vies: "+str(round(game_health, 1)), 20, "orange", (gui_size[0]-100, 20), gui)
-	RenderText("Argent: "+str(round(game_money, 1)), 20, "orange", (gui_size[0]-100, 50), gui)
-	RenderText("Nombre de tours: "+str(number_tower), 13, "brown", (gui_size[0]-100, 100), gui)
-	RenderText("Nombre d'ennemis: "+str(number_ennemis), 13, "brown", (gui_size[0]-100, 130), gui)
-	RenderText("Nombre d'ennemis vaincus: "+str(number_kill), 13, "brown", (gui_size[0]-100, 160), gui)
+	RenderText("FPS: "+str(game.last_fps), 10, "red", (gui_size[0]-30, gui_size[1]-10), gui)
+	RenderText("Vies: "+str(round(game.health, 1)), 20, "orange", (gui_size[0]-100, 20), gui)
+	RenderText("Argent: "+str(round(game.money, 1)), 20, "orange", (gui_size[0]-100, 50), gui)
+	RenderText("Nombre de tours: "+str(len(game.all_towers)), 13, "brown", (gui_size[0]-100, 100), gui)
+	RenderText("Nombre d'ennemis: "+str(len(game.all_enemies)), 13, "brown", (gui_size[0]-100, 130), gui)
+	RenderText("Nombre d'ennemis vaincus: "+str(game.ennemies_killed), 13, "brown", (gui_size[0]-100, 160), gui)
+	RenderText("Vague "+str(game.vague.current_vague+1), 25, "blue", (gui_size[0]-100, 200), gui)
+	RenderText("Nombre d'ennemis: "+ str(game.vague.current_spawned) + " / " + str(game.vague.total_enemies), 15, "blue", (gui_size[0]-100, 230), gui)
+	RenderText("Ennemis restants: "+str(game.vague.total_enemies-game.vague.current_spawned+len(game.all_enemies)), 15, "blue", (gui_size[0]-100, 250), gui)
+	#delta = int(game.vague.last_spawn_time + game.vague.time_after_vague - time.time())
+	delta = int(game.vague.time_after_vague + (game.vague.total_enemies-game.vague.current_spawned)*game.vague.time_between_enemies + (game.vague.time_between_enemies-(time.time()-game.vague.last_spawn_time)))
+	RenderText("Prochaine vague dans ", 15, "blue", (gui_size[0]-100, 270), gui)
+	RenderText("{:0>2d}".format(int(delta/60)) + ":" + "{:0>2d}".format(delta%60), 20, "blue", (gui_size[0]-100, 290), gui)
 	return gui
 
 def RenderBottomGUI(game):
