@@ -18,6 +18,6 @@ enemies = [
 "max_health" : (100,0),
 "resistance" : (1,0),
 "speed" : (1,0),
-"gain" : (2,0),
+"gain" : (10,0),
 "life_bar_size" : (25,4)}
 ]
