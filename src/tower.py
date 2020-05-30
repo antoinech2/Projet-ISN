@@ -87,15 +87,15 @@ class Tower(pygame.sprite.Sprite):
 		if self.game.map_surface.get_rect().collidepoint(position):
 			self.rect.center = (position[0],position[1])
 			if self.game.money <= self.cost:
-				pygame.draw.circle(self.placement_color,pygame.Color(158, 101, 32, 50),self.placement_color.get_rect().center, self.radius)
+				pygame.draw.circle(self.placement_color,pygame.Color(158, 101, 32, 75),self.placement_color.get_rect().center, self.radius)
 				interfaces.RenderText("Fonds insuffisants", 15, "red", self.rect.center, self.game.screen)
 			else:
 				collide = pygame.sprite.spritecollide(self,self.game.all_towers, False, pygame.sprite.collide_circle)
 				if collide == [] and self.rect.collidelist(self.game.map_rect_list) == -1:
 					#pygame.draw.rect(self.image, pygame.Color(255,0,0,120), (0,0,self.rect.width, self.rect.height))
-					pygame.draw.circle(self.placement_color,pygame.Color(0,255,0,50),self.placement_color.get_rect().center, self.radius)
+					pygame.draw.circle(self.placement_color,pygame.Color(0,255,0,75),self.placement_color.get_rect().center, self.radius)
 				else:
-					pygame.draw.circle(self.placement_color,pygame.Color(255,0,0,50),self.placement_color.get_rect().center, self.radius)
+					pygame.draw.circle(self.placement_color,pygame.Color(255,0,0,75),self.placement_color.get_rect().center, self.radius)
 		else:
 			self.rect.center = (-100,-100)
 
