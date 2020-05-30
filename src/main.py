@@ -111,6 +111,12 @@ class Game():
 					for current_enemy in self.all_enemies:
 						current_enemy.UpdatePosition(changed_ratio)
 						current_enemy.NewDestination()
+				elif event.type == pygame.KEYDOWN:
+					if event.key == pygame.K_p:
+						if self.current_gui == "game":
+							self.current_gui = "pause"
+						else:
+							self.current_gui = "game"
 
 				#Evenements lors de la partie
 				if self.current_gui == "game":
@@ -179,6 +185,11 @@ class Game():
 					if current_tower.rect.collidepoint(pygame.mouse.get_pos()):
 						current_tower.DisplayRange()
 						self.screen.blit(interfaces.ShowTowerStats(self, current_tower), (0,self.screen_size[1]*0.8))
+			elif self.current_gui == "pause":
+				interfaces.RenderText("Jeu en pause.", 80, "red", (self.screen_size[0]/2, self.screen_size[1]/4), self.screen)
+				interfaces.RenderText("Appuyez sur 'P' pour reprendre le jeu.", 50, "yellow", (self.screen_size[0]/2, self.screen_size[1]/4+100), self.screen)
+
+
 			#Boucle lors de l'écran de fin
 			elif self.current_gui == "game_lost":
 				self.screen.fill(pygame.Color("blue"))
