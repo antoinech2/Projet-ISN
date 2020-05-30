@@ -13,6 +13,14 @@
 ############################################
 
 vagues = [
-{"time_between_enemies" : 1,"time_after_vague" : 10,"enemies" : [(0,1)]},
-{"time_between_enemies" : 1.5,"time_after_vague" : 15,"enemies" : [(0,10)]}
+{"time_between_enemies" : 1,"time_after_vague" : 5,"enemies" : [(0,1)]},
+{"time_between_enemies" : 1,"time_after_vague" : 5,"enemies" : [(1,1)]},
+{"time_between_enemies" : 1,"time_after_vague" : 5,"enemies" : [(2,1)]},
+{"time_between_enemies" : 1,"time_after_vague" : 5,"enemies" : [(3,1)]},
+{"time_between_enemies" : 1,"time_after_vague" : 5,"enemies" : [(4,1)]},
+{"time_between_enemies" : 1,"time_after_vague" : 5,"enemies" : [(5,1)]},
+{"time_between_enemies" : 1,"time_after_vague" : 5,"enemies" : [(6,1)]},
+{"time_between_enemies" : 1,"time_after_vague" : 5,"enemies" : [(7,1)]},
+{"time_between_enemies" : 1,"time_after_vague" : 5,"enemies" : [(8,1)]},
+{"time_between_enemies" : 1,"time_after_vague" : 5,"enemies" : [(9,1)]},
 ]
