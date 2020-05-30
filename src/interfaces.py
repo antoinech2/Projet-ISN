@@ -76,6 +76,7 @@ def ShowPlacementTowerStats(game, tower_type):
 	RenderText("Vie: "+str(tower_info["shoot_max"]), 15, "black", (400, 60), gui)
 	RenderText("Vitesse des projectiles: "+str(tower_info["projectile_speed"][0])+"±"+str(tower_info["projectile_speed"][1]), 15, "black", (400, 80), gui)
 	RenderText("Rayon d'action: "+str(tower_info["range"]), 15, "black", (400, 100), gui)
+	RenderText("Prix: "+str(tower_info["cost"]), 25, "blue", (600, 60), gui)
 	return gui
 
 
