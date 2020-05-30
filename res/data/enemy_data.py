@@ -22,7 +22,7 @@ enemies = [
 "life_bar_size" : (25,4)},
 
 {"name" : "Basique",
-"image_path" : "../res/textures/enemy/virus_2.png",
+"image_path" : "../res/textures/enemy/virus_3.png",
 "image_size" : (40, 40),
 "max_health" : (150,0),
 "resistance" : (0.9,0),
@@ -31,7 +31,7 @@ enemies = [
 "life_bar_size" : (25,4)},
 
 {"name" : "Basique",
-"image_path" : "../res/textures/enemy/virus_3.png",
+"image_path" : "../res/textures/enemy/virus_4.png",
 "image_size" : (40, 40),
 "max_health" : (200,0),
 "resistance" : (0.8,0),
@@ -40,7 +40,7 @@ enemies = [
 "life_bar_size" : (25,4)},
 
 {"name" : "Basique",
-"image_path" : "../res/textures/enemy/virus_4.png",
+"image_path" : "../res/textures/enemy/virus_2.png",
 "image_size" : (40, 40),
 "max_health" : (250,0),
 "resistance" : (0.6,0),
@@ -49,7 +49,7 @@ enemies = [
 "life_bar_size" : (25,4)},
 
 {"name" : "Basique",
-"image_path" : "../res/textures/enemy/virus_5.png",
+"image_path" : "../res/textures/enemy/virus_7.png",
 "image_size" : (40, 40),
 "max_health" : (200,0),
 "resistance" : (1,0),
@@ -58,7 +58,7 @@ enemies = [
 "life_bar_size" : (25,4)},
 
 {"name" : "Basique",
-"image_path" : "../res/textures/enemy/virus_6.png",
+"image_path" : "../res/textures/enemy/virus_9.png",
 "image_size" : (40, 40),
 "max_health" : (250,0),
 "resistance" : (1,0),
@@ -67,7 +67,7 @@ enemies = [
 "life_bar_size" : (25,4)},
 
 {"name" : "Basique",
-"image_path" : "../res/textures/enemy/virus_7.png",
+"image_path" : "../res/textures/enemy/virus_5.png",
 "image_size" : (40, 40),
 "max_health" : (400,0),
 "resistance" : (0.5,0),
@@ -76,7 +76,7 @@ enemies = [
 "life_bar_size" : (25,4)},
 
 {"name" : "Basique",
-"image_path" : "../res/textures/enemy/virus_8.png",
+"image_path" : "../res/textures/enemy/virus_6.png",
 "image_size" : (40, 40),
 "max_health" : (800,0),
 "resistance" : (0.5,0),
@@ -85,7 +85,7 @@ enemies = [
 "life_bar_size" : (25,4)},
 
 {"name" : "Basique",
-"image_path" : "../res/textures/enemy/virus_9.png",
+"image_path" : "../res/textures/enemy/virus_8.png",
 "image_size" : (40, 40),
 "max_health" : (100,0),
 "resistance" : (0.3,0),
