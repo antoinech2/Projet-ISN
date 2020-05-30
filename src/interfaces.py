@@ -16,6 +16,15 @@
 #Importation des modules externes:
 import pygame
 import time
+from sys import path
+############################################
+
+path.append("../res/data/")
+
+############################################
+#Importation des modules internes:
+import tower_data
+import tower
 ############################################
 
 def RenderRightGUI(game):
@@ -35,7 +44,40 @@ def RenderRightGUI(game):
 	delta = int(game.vague.time_after_vague + (game.vague.total_enemies-game.vague.current_spawned)*game.vague.time_between_enemies + (game.vague.time_between_enemies-(time.time()-game.vague.last_spawn_time)))
 	RenderText("Prochaine vague dans ", 15, "blue", (gui_size[0]-100, 270), gui)
 	RenderText("{:0>2d}".format(int(delta/60)) + ":" + "{:0>2d}".format(delta%60), 20, "blue", (gui_size[0]-100, 290), gui)
+
+	index = 0
+	for current_tower in tower_data.towers:
+		pygame.draw.rect(gui, pygame.Color(117, 117, 117), pygame.Rect(5+65*(index%3),320+65*int(index/3),55,55), 3)
+		gui.blit(pygame.transform.scale(tower.Tower.images[index],(45,45)), (10+65*(index%3),325+65*int(index/3)))
+		index += 1
 	return gui
+
+def CheckMouseCollision(game):
+	gui_size_x = 0.8*game.screen_size[0]
+	index = 0
+	for current_tower in tower_data.towers:
+		rect = pygame.Rect(gui_size_x+5+65*(index%3),320+65*int(index/3),55,55)
+		if rect.collidepoint(pygame.mouse.get_pos()):
+			return index
+		index += 1
+
+def ShowPlacementTowerStats(game, tower_type):
+	"Affichage des informations et statistiques de la tour sélectionnée dans le menu latéral"
+	gui_size = (0.8*game.screen_size[0]+1,0.2*game.screen_size[1]+1)
+	gui = pygame.Surface(gui_size)
+	gui.fill(pygame.Color("gray"))
+	tower_info = tower_data.towers[tower_type]
+	RenderText("Informations sur la tour: " + str(tower_info["name"]), 20, "red", (275, 20), gui)
+	RenderText("Taille: "+str(round(tower_info["image_size"][0]/game.box_size_pixel[0],2))+" x "+str(round(tower_info["image_size"][1]/game.box_size_pixel[1],2)), 15, "black", (150, 40), gui)
+	RenderText("Dégâts: "+str(tower_info["attack_damage"][0])+"±"+str(tower_info["attack_damage"][1]), 15, "black", (150, 60), gui)
+	RenderText("Délai d'attaque: "+str(tower_info["attack_cooldown"][0])+"±"+str(tower_info["attack_cooldown"][1])+" sec.", 15, "black", (150, 80), gui)
+	RenderText("Attaques simultanées: "+str(tower_info["attack_enemies"][0])+"±"+str(tower_info["attack_enemies"][1]), 15, "black", (150, 100), gui)
+	RenderText("Réduction de vie par tir: "+str(tower_info["shoot_reduction"][0])+"±"+str(tower_info["shoot_reduction"][1]), 15, "black", (400, 40), gui)
+	RenderText("Vie: "+str(tower_info["shoot_max"]), 15, "black", (400, 60), gui)
+	RenderText("Vitesse des projectiles: "+str(tower_info["projectile_speed"][0])+"±"+str(tower_info["projectile_speed"][1]), 15, "black", (400, 80), gui)
+	RenderText("Rayon d'action: "+str(tower_info["range"]), 15, "black", (400, 100), gui)
+	return gui
+
 
 def RenderBottomGUI(game):
 	"Affichage de l'interface latérale basse"

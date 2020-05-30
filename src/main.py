@@ -66,7 +66,7 @@ class Game():
 		self.screen_size = Game.DEFAULT_SCREEN_SIZE
 		self.global_ratio = 1
 		#Initialisation de la fenêtre
-		self.screen = pygame.display.set_mode(Game.DEFAULT_SCREEN_SIZE) #, pygame.RESIZABLE (Redimention désactivée temporairement)
+		self.screen = pygame.display.set_mode(Game.DEFAULT_SCREEN_SIZE) #, pygame.RESIZABLE (Redimension désactivée temporairement)
 		pygame.display.set_caption("Tower Defense v1.2.0")
 
 		#Génération du chemin aléatoire
@@ -75,6 +75,7 @@ class Game():
 		self.map_surface, self.box_size_pixel, self.map_rect_list = map_drawing.CreateMapSurface(Game.MAP_SIZE,self.path_coords, self.screen_size)
 
 		self.vague = vague.Vague(self)
+		tower.InitTowers()
 
 	def Run(self):
 		"Boucle principale du jeu"
@@ -113,17 +114,17 @@ class Game():
 
 				#Evenements lors de la partie
 				if self.current_gui == "game":
-					#Ajout d'une tour avec la touche T
-					if event.type == pygame.KEYDOWN:
-						if event.key == pygame.K_t:
-							self.placing_tower.add(tower.Tower(self, 0))
 					#Placement de la tour avec le clic de la souris
-					elif event.type == pygame.MOUSEBUTTONDOWN:
+					if event.type == pygame.MOUSEBUTTONDOWN:
 						if self.placing_tower.sprite != None:
 							new_tower = self.placing_tower.sprite.PlaceTower(event.pos)
 							if new_tower:
 								self.all_towers.add(new_tower)
-								self.placing_tower.empty()
+							self.placing_tower.empty()
+						else:
+							tower_type_collision = interfaces.CheckMouseCollision(self)
+							if tower_type_collision != None:
+								self.placing_tower.add(tower.Tower(self, tower_type_collision))
 
 			#Boucle lors de la partie
 			if self.current_gui == "game":
@@ -165,6 +166,9 @@ class Game():
 				#Affichage des menus graphiques latéraux
 				self.screen.blit(interfaces.RenderBottomGUI(self),(0,self.screen_size[1]*0.8))
 				self.screen.blit(interfaces.RenderRightGUI(self),(self.screen_size[0]*0.8,0))
+				tower_type_collision = interfaces.CheckMouseCollision(self)
+				if tower_type_collision != None:
+					self.screen.blit(interfaces.ShowPlacementTowerStats(self, tower_type_collision),(0,self.screen_size[1]*0.8))
 				#Affichage des barres de vie des ennemis et les statistiques de l'ennemi sélectionné.
 				for current_enemy in self.all_enemies:
 					current_enemy.DisplayLifeBar()

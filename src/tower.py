@@ -30,6 +30,11 @@ import tower_data
 ############################################
 
 ############################################
+def InitTowers():
+	Tower.images = []
+	for tower in tower_data.towers:
+		Tower.images.append(pygame.image.load(tower["image_path"]))
+
 # Définition de la class qui gère les tours:
 class Tower(pygame.sprite.Sprite):
 	def __init__(self, game, tower_type):
@@ -40,7 +45,7 @@ class Tower(pygame.sprite.Sprite):
 		self.game = game
 		#self.image = pygame.Surface((50*self.game.global_ratio,50*self.game.global_ratio))
 		#self.image.fill(pygame.Color("red"))
-		self.image = pygame.transform.scale(pygame.image.load(data["image_path"]), data["image_size"])
+		self.image = pygame.transform.scale(Tower.images[tower_type], data["image_size"])  #pygame.image.load(data["image_path"])
 		self.rect = self.image.get_rect()
 		self.rect.center = (0,0)
 		self.last_attack = time.time()
