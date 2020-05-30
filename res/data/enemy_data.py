@@ -1,10 +1,15 @@
-
-#SYNTAXE:
-#["NOM", "IMAGE PATH", (WIDTH, HEIGHT), (MAX_HEALTH, MAX_HEALTH_RANDOM_RANGE), (RESISTANCE, RESISTANCE_RANDOM_RANGE),
-#(SPEED, SPEED_RANDOM_RANGE), (GAIN, GAIN_RANDOM_RANGE), (LIFE_BAR_WIDTH, LIFE_BAR_HEIGHT)]
-#enemies = [\
-#["Basique", "../res/textures/enemy/virus_rouge.png", (40, 40), (100,0), (100,0), (1,0), (2,0), (25,4)]\
-#]
+############################################
+# INFORMATIONS / DESCRIPTION:
+# Jeu Tower Defense Version 1.2.0
+# Programme Python 3.7 ou 3.8
+# Auteurs: Titouan Escaille, Antoine Cheucle
+# Encodage: UTF-8
+# Licence: Aucune
+# Version: 1.2.0
+#
+# Description: Ce fichier contient les données relatives aux ennemis.
+# Chaque ennemi est défini ici avec toutes ses caractéristiques.
+############################################
 
 enemies = [
 {"name" : "Basique",
@@ -14,5 +19,5 @@ enemies = [
 "resistance" : (1,0),
 "speed" : (1,0),
 "gain" : (2,0),
-"life_bar_size" : (25,4)
-}]
+"life_bar_size" : (25,4)}
+]

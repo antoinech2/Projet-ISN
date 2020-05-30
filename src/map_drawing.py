@@ -1,11 +1,11 @@
 ############################################
 # INFORMATIONS / DESCRIPTION:
 # Jeu Tower Defense Version 0.1
-# Programme Python 3.7
+# Programme Python 3.7 ou 3.8
 # Auteurs: Titouan Escaille, Antoine Cheucle
 # Encodage: UTF-8
 # Licence: Aucune
-# Version: 0.4.0-InDev
+# Version: 1.2.0
 #
 # Script principal d'affichage graphique de la map
 #
@@ -20,8 +20,8 @@ import pygame
 import math
 import random
 ############################################
-# Importation des images :
 
+# Importation des images :
 img_chemin = pygame.image.load('../res/textures/map/chemin.png')
 img_chemin_angle = pygame.image.load('../res/textures/map/chemin_angle.png')
 img_herbe = pygame.image.load('../res/textures/map/herbe.png')
@@ -29,6 +29,7 @@ img_herbev2 = pygame.image.load('../res/textures/map/herbev2.png')
 img_plante = pygame.image.load('../res/textures/map/plante.png')
 img_arbre = pygame.image.load('../res/textures/map/arbre.png')
 ############################################
+
 # Définition des fonctions locales:
 def CreateMapSurface(map_size,path_coords, screen_size):
 	"Fonction de création de la surface pygame représentant la map"

@@ -1,11 +1,11 @@
 ############################################
 # INFORMATIONS / DESCRIPTION:
-# Jeu Tower Defense Version 0.4.0-InDev
-# Programme Python 3.7
+# Jeu Tower Defense Version 1.2.0
+# Programme Python 3.7 ou 3.8
 # Auteurs: Titouan Escaille, Antoine Cheucle
 # Encodage: UTF-8
 # Licence: Aucune
-# Version: 0.4.0-InDev
+# Version: 1.2.0
 #
 # Script de génération aléatoire du chemin
 #
@@ -15,7 +15,7 @@
 ############################################
 
 ############################################
-# Importation des modules
+# Importation des modules externes
 import random
 ############################################
 

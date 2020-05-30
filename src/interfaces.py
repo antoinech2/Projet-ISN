@@ -1,11 +1,11 @@
 ############################################
 # INFORMATIONS / DESCRIPTION:
-# Jeu Tower Defense Version 0.4.0-InDev
-# Programme Python 3.7
+# Jeu Tower Defense Version 1.2.0
+# Programme Python 3.7 ou 3.8
 # Auteurs: Titouan Escaille, Antoine Cheucle
 # Encodage: UTF-8
 # Licence: Aucune
-# Version: 0.4.0-InDev
+# Version: 1.2.0
 #
 # Description: Ce fichier contient les fonctions qui gèrent
 # les interfaces latérales du jeu, les menu de début, fin et pause
@@ -32,21 +32,20 @@ def RenderRightGUI(game):
 	RenderText("Vague "+str(game.vague.current_vague+1), 25, "blue", (gui_size[0]-100, 200), gui)
 	RenderText("Nombre d'ennemis: "+ str(game.vague.current_spawned) + " / " + str(game.vague.total_enemies), 15, "blue", (gui_size[0]-100, 230), gui)
 	RenderText("Ennemis restants: "+str(game.vague.total_enemies-game.vague.current_spawned+len(game.all_enemies)), 15, "blue", (gui_size[0]-100, 250), gui)
-	#delta = int(game.vague.last_spawn_time + game.vague.time_after_vague - time.time())
 	delta = int(game.vague.time_after_vague + (game.vague.total_enemies-game.vague.current_spawned)*game.vague.time_between_enemies + (game.vague.time_between_enemies-(time.time()-game.vague.last_spawn_time)))
 	RenderText("Prochaine vague dans ", 15, "blue", (gui_size[0]-100, 270), gui)
 	RenderText("{:0>2d}".format(int(delta/60)) + ":" + "{:0>2d}".format(delta%60), 20, "blue", (gui_size[0]-100, 290), gui)
 	return gui
 
 def RenderBottomGUI(game):
-	"Affichage de l'interface latérale droite"
+	"Affichage de l'interface latérale basse"
 	gui_size = (0.8*game.screen_size[0]+1,0.2*game.screen_size[1]+1)
 	gui = pygame.Surface(gui_size)
 	gui.fill(pygame.Color("gray"))
-	# RenderText("Nombre d'ennemis vaincus: "+str(number_kill), 13, "brown", (gui_size[0]-100, 160), gui)
 	return gui
 
 def ShowTowerStats(game, tower):
+	"Affichage des informations et statistiques de la tour pointée"
 	gui_size = (0.8*game.screen_size[0]+1,0.2*game.screen_size[1]+1)
 	gui = pygame.Surface(gui_size)
 	gui.fill(pygame.Color("gray"))
@@ -64,6 +63,7 @@ def ShowTowerStats(game, tower):
 	return gui
 
 def ShowEnnemyStats(game, enemy):
+	"Affichage des informations et statistiques de l'ennemi pointé"
 	gui_size = (0.8*game.screen_size[0]+1,0.2*game.screen_size[1]+1)
 	gui = pygame.Surface(gui_size)
 	gui.fill(pygame.Color("gray"))
@@ -71,20 +71,14 @@ def ShowEnnemyStats(game, enemy):
 	RenderText("Résistance: "+str(round(enemy.resistance,2)), 15, "black", (150, 40), gui)
 	RenderText("Vitesse: "+str(round(enemy.speed,2)), 15, "black", (150, 60), gui)
 	RenderText("Gain d'élimination: "+str(round(enemy.money_gain,1)), 15, "black", (150, 80), gui)
-	#RenderText("Réduction de vie par tir: "+str(tower.shoot_reduction)+"±"+str(tower.random_shoot_reduction_range), 15, "black", (150, 100), gui)
-
 	RenderText("Statistiques sur l'ennemi: ", 20, "red", (450, 20), gui)
 	RenderText("Vie: "+str(round(enemy.current_health,1))+"/"+str(round(enemy.max_health,1))+" ("+str(round(enemy.current_health/enemy.max_health*100))+" %)", 15, "black", (450, 40), gui)
 	RenderText("Position: "+str(enemy.current_case_number)+"/"+str(len(game.path_coords)-1), 15, "black", (450, 60), gui)
-	#RenderText("Tirs totaux: "+str(tower.total_shoot), 15, "black", (450, 60), gui)
-	#RenderText("Dêgats infligés: "+str(round(tower.total_damage,1)), 15, "black", (450, 80), gui)
-	#RenderText("Ennemis éliminés: "+str(tower.total_kill), 15, "black", (450, 100), gui)
 	return gui
 
 
 def RenderText(texte, taille, color, coords, surface, centered = True):
 	"Affiche un texte en forme sur une surface"
-	# pygame.font.Font("../res/fonts/Righteous-Regular.ttf", taille)
 	text = font[taille].render(texte, True, pygame.Color(color))
 	rect = text.get_rect()
 	if centered:
@@ -92,6 +86,7 @@ def RenderText(texte, taille, color, coords, surface, centered = True):
 	surface.blit(text,rect)
 
 def InitFonts():
+	"Initialisation des polices"
 	global font
 	pygame.font.init()
 	font = []

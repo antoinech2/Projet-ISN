@@ -1,11 +1,11 @@
 ############################################
 # INFORMATIONS / DESCRIPTION:
-# Jeu Tower Defense Version 0.4.0-InDev
-# Programme Python 3.7
+# Jeu Tower Defense Version 1.2.0
+# Programme Python 3.7 ou 3.8
 # Auteurs: Titouan Escaille, Antoine Cheucle
 # Encodage: UTF-8
 # Licence: Aucune
-# Version: 0.4.0-InDev
+# Version: 1.2.0
 #
 # Description: Ce fichier contient le programme principal qui gère
 # la création de la fenêtre et la gestion de la boucle principale
@@ -44,7 +44,7 @@ class Game():
 	############################################
 
 	def __init__(self):
-		#Initialisation du jeu
+		"Initialisation du jeu"
 		self.current_gui = "game"
 		self.is_game_running = True
 		self.current_tick = 0
@@ -66,8 +66,8 @@ class Game():
 		self.screen_size = Game.DEFAULT_SCREEN_SIZE
 		self.global_ratio = 1
 		#Initialisation de la fenêtre
-		self.screen = pygame.display.set_mode(Game.DEFAULT_SCREEN_SIZE, pygame.RESIZABLE)
-		pygame.display.set_caption("Tower Defense v0.3")
+		self.screen = pygame.display.set_mode(Game.DEFAULT_SCREEN_SIZE) #, pygame.RESIZABLE (Redimention désactivée temporairement)
+		pygame.display.set_caption("Tower Defense v1.2.0")
 
 		#Génération du chemin aléatoire
 		self.path_coords = map_generator.CalculateNewPath(Game.MAP_SIZE)
@@ -77,7 +77,7 @@ class Game():
 		self.vague = vague.Vague(self)
 
 	def Run(self):
-		#Boucle principale
+		"Boucle principale du jeu"
 		while self.is_game_running:
 			self.current_tick += 1
 			self.current_fps += 1
@@ -104,7 +104,7 @@ class Game():
 
 					changed_ratio = new_width/self.screen_size[0]
 					self.global_ratio = new_width/Game.DEFAULT_SCREEN_SIZE[0]
-					pygame.display.set_mode((new_width,new_height), pygame.RESIZABLE)
+					pygame.display.set_mode((new_width,new_height)) #, pygame.RESIZABLE
 					self.screen_size = (new_width, new_height)
 					self.map_surface, self.box_size_pixel = map_drawing.ResizeMapSurface(Game.MAP_SIZE, self.screen_size, self.map_surface)
 					for current_enemy in self.all_enemies:
@@ -128,14 +128,12 @@ class Game():
 			#Boucle lors de la partie
 			if self.current_gui == "game":
 
-				#Calcul du tick
-				#Ajout d'un ennemi tous les 100 ticks
-				#if self.current_tick%100 == 0:
-				#	self.all_enemies.add(enemy.Enemy(self, 0))
+				#CALCUL DU TICK
+
+				#Calcul de la vague (apparition des ennemis si nécessaire)
 				self.vague.CalcVague()
 				#Avancement des ennemis et suppression des ennemis qui sont au bout du chemin
 				for current_enemy in self.all_enemies:
-					#current_enemy.TakeDamage(random.random())
 					current_enemy.Move()
 				#Changement de la couleur de la tour en placement en fonction des collisions
 				for current_tower in self.placing_tower:
@@ -143,26 +141,36 @@ class Game():
 				#Attaque des tours déjà placées
 				for current_tower in self.all_towers:
 					current_tower.Shot()
+				#Avancée des projectiles vers leurs ennemis
 				for current_projectile in self.all_projectiles:
 					current_projectile.Move()
 
-				#Affichage à l'écran
+				#AFFICHAGE A L'ECRAN
+
+				#Affichage de la map de fond
 				self.screen.blit(self.map_surface,(0,0))
+				#Affichage des tours en placement
 				self.placing_tower.draw(self.screen)
+				#Affichage du range et des informations de la tour en placement
 				if self.placing_tower.sprite != None:
 					self.placing_tower.sprite.DisplayRange()
 					self.placing_tower.sprite.Display()
+				#Affichage de la barre de vie de toutes les tours.
 				for current_tower in self.all_towers:
 					current_tower.DisplayLifeBar()
+				#Affichage des tours, ennemis et projectiles
 				self.all_towers.draw(self.screen)
 				self.all_enemies.draw(self.screen)
 				self.all_projectiles.draw(self.screen)
+				#Affichage des menus graphiques latéraux
 				self.screen.blit(interfaces.RenderBottomGUI(self),(0,self.screen_size[1]*0.8))
 				self.screen.blit(interfaces.RenderRightGUI(self),(self.screen_size[0]*0.8,0))
+				#Affichage des barres de vie des ennemis et les statistiques de l'ennemi sélectionné.
 				for current_enemy in self.all_enemies:
 					current_enemy.DisplayLifeBar()
 					if current_enemy.rect.collidepoint(pygame.mouse.get_pos()):
 						self.screen.blit(interfaces.ShowEnnemyStats(self, current_enemy), (0,self.screen_size[1]*0.8))
+				#Affichage du rayon et des statistiques de la tour sélectionnée
 				for current_tower in self.all_towers:
 					if current_tower.rect.collidepoint(pygame.mouse.get_pos()):
 						current_tower.DisplayRange()

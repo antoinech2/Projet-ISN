@@ -1,11 +1,11 @@
 ############################################
 # INFORMATIONS / DESCRIPTION:
-# Jeu Tower Defense Version 0.4.0-InDev
-# Programme Python 3.7
+# Jeu Tower Defense Version 1.2.0
+# Programme Python 3.7 ou 3.8
 # Auteurs: Titouan Escaille, Antoine Cheucle
 # Encodage: UTF-8
 # Licence: Aucune
-# Version: 0.4.0-InDev
+# Version: 1.2.0
 #
 # Description: Ce fichier contient l'objet qui gère les ennemis du jeu
 # Il contient toutes les méthodes pour le faire appairaitre, disparaitre
@@ -18,7 +18,12 @@ import pygame
 import math
 import random
 from sys import path
+############################################
+
 path.append("../res/data/")
+
+############################################
+#Importation des modules internes:
 import enemy_data
 ############################################
 

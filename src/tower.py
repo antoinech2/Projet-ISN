@@ -1,11 +1,11 @@
 ############################################
 # INFORMATIONS / DESCRIPTION:
-# Jeu Tower Defense Version 0.4.0-InDev
-# Programme Python 3.7
+# Jeu Tower Defense Version 1.2.0
+# Programme Python 3.7 ou 3.8
 # Auteurs: Titouan Escaille, Antoine Cheucle
 # Encodage: UTF-8
 # Licence: Aucune
-# Version: 0.4.0-InDev
+# Version: 1.2.0
 #
 # Description: Ce fichier contient l'objet qui gère les tours et les projectiles du jeu
 # Il contient toutes les méthodes pour ajouter et placer des tours sur la map
@@ -19,13 +19,14 @@ import math
 import time
 import random
 from sys import path
-path.append("../res/data/")
-import tower_data
 ############################################
+
+path.append("../res/data/")
 
 ############################################
 #Importation des modules internes:
 import interfaces
+import tower_data
 ############################################
 
 ############################################
@@ -59,6 +60,8 @@ class Tower(pygame.sprite.Sprite):
 		self.shoot_reduction = data["shoot_reduction"][0]
 		self.random_shoot_reduction_range = data["shoot_reduction"][1]
 		self.shoot_remain = self.shoot_max
+		self.projectile_speed = data["projectile_speed"][0]
+		self.random_projectile_speed_range = data["projectile_speed"][1]
 
 		#Statistiques
 		self.total_shoot = 0
@@ -164,10 +167,10 @@ class Projectile(pygame.sprite.Sprite):
 		self.rect.center = self.coords
 
 		#caractéristiques
-		self.random_speed_range = 0.5
-		self.speed = 2.5 + random.uniform(-self.random_speed_range, self.random_speed_range)
+		self.speed = self.tower.projectile_speed + random.uniform(-self.tower.random_projectile_speed_range, self.tower.random_projectile_speed_range)
 
 	def Move(self):
+		"Fait avancer le projectile dans la direction de sa cible"
 		angle = math.atan2(self.target.rect.centery - self.rect.centery, self.target.rect.centerx - self.rect.centerx)
 		self.coords[0] += self.speed*math.cos(angle)
 		self.coords[1] += self.speed*math.sin(angle)
