@@ -18,7 +18,7 @@ enemies = [
 "max_health" : (100,0),
 "resistance" : (1,0),
 "speed" : (1,0),
-"gain" : (5,0),
+"gain" : (10,0),
 "life_bar_size" : (25,4)},
 
 {"name" : "Basique",
@@ -27,7 +27,7 @@ enemies = [
 "max_health" : (150,0),
 "resistance" : (0.9,0),
 "speed" : (1,0),
-"gain" : (10,0),
+"gain" : (15,0),
 "life_bar_size" : (25,4)},
 
 {"name" : "Basique",
@@ -36,7 +36,7 @@ enemies = [
 "max_health" : (200,0),
 "resistance" : (0.8,0),
 "speed" : (1,0),
-"gain" : (20,0),
+"gain" : (25,0),
 "life_bar_size" : (25,4)},
 
 {"name" : "Basique",
@@ -44,8 +44,8 @@ enemies = [
 "image_size" : (40, 40),
 "max_health" : (250,0),
 "resistance" : (0.6,0),
-"speed" : (1.5,0),
-"gain" : (30,0),
+"speed" : (1.2,0),
+"gain" : (35,0),
 "life_bar_size" : (25,4)},
 
 {"name" : "Basique",
@@ -54,7 +54,7 @@ enemies = [
 "max_health" : (150,0),
 "resistance" : (1,0),
 "speed" : (2,0),
-"gain" : (30,0),
+"gain" : (35,0),
 "life_bar_size" : (25,4)},
 
 {"name" : "Basique",
@@ -63,7 +63,7 @@ enemies = [
 "max_health" : (100,0),
 "resistance" : (1,0),
 "speed" : (3,0),
-"gain" : (40,0),
+"gain" : (45,0),
 "life_bar_size" : (25,4)},
 
 {"name" : "Basique",
@@ -98,7 +98,7 @@ enemies = [
 "image_size" : (40, 40),
 "max_health" : (1000,0),
 "resistance" : (0.1,0),
-"speed" : (0.5,0),
+"speed" : (0.2,0),
 "gain" : (500,0),
 "life_bar_size" : (25,4)}
 ]

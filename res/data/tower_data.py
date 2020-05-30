@@ -36,7 +36,7 @@ towers = [
 "shoot_reduction": (1,0),
 "cost" : 50,
 "life_bar_range" : 22,
-"projectile_speed" : (2.5,0.5)},
+"projectile_speed" : (3,0.5)},
 
 {"name" : "high shooting speed",
 "image_path" : "../res/textures/tower/tower_3.png",
@@ -49,7 +49,7 @@ towers = [
 "shoot_reduction": (1,0),
 "cost" : 100,
 "life_bar_range" : 22,
-"projectile_speed" : (3,0.5)},
+"projectile_speed" : (4,0.5)},
 
 {"name" : "Multi shot",
 "image_path" : "../res/textures/tower/tower_4.png",
@@ -75,7 +75,7 @@ towers = [
 "shoot_reduction": (1,0),
 "cost" : 100,
 "life_bar_range" : 22,
-"projectile_speed" : (2.5,0.5)},
+"projectile_speed" : (3,0.5)},
 
 {"name" : "Big damage",
 "image_path" : "../res/textures/tower/tower_6.png",
@@ -114,5 +114,5 @@ towers = [
 "shoot_reduction": (5,2.5),
 "cost" : 1000,
 "life_bar_range" : 22,
-"projectile_speed" : (3,0.5)},
+"projectile_speed" : (4,0.5)},
 ]
