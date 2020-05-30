@@ -38,12 +38,13 @@ def RenderRightGUI(game):
 	RenderText("Nombre de tours: "+str(len(game.all_towers)), 13, "brown", (gui_size[0]-100, 100), gui)
 	RenderText("Nombre d'ennemis: "+str(len(game.all_enemies)), 13, "brown", (gui_size[0]-100, 130), gui)
 	RenderText("Nombre d'ennemis vaincus: "+str(game.ennemies_killed), 13, "brown", (gui_size[0]-100, 160), gui)
-	RenderText("Vague "+str(game.vague.current_vague+1), 25, "blue", (gui_size[0]-100, 200), gui)
-	RenderText("Nombre d'ennemis: "+ str(game.vague.current_spawned) + " / " + str(game.vague.total_enemies), 15, "blue", (gui_size[0]-100, 230), gui)
-	RenderText("Ennemis restants: "+str(game.vague.total_enemies-game.vague.current_spawned+len(game.all_enemies)), 15, "blue", (gui_size[0]-100, 250), gui)
-	delta = int(game.vague.time_after_vague + (game.vague.total_enemies-game.vague.current_spawned)*game.vague.time_between_enemies + (game.vague.time_between_enemies-(time.time()-game.vague.last_spawn_time)))
-	RenderText("Prochaine vague dans ", 15, "blue", (gui_size[0]-100, 270), gui)
-	RenderText("{:0>2d}".format(int(delta/60)) + ":" + "{:0>2d}".format(delta%60), 20, "blue", (gui_size[0]-100, 290), gui)
+	if game.in_preparation == False:
+		RenderText("Vague "+str(game.vague.current_vague+1), 25, "blue", (gui_size[0]-100, 200), gui)
+		RenderText("Nombre d'ennemis: "+ str(game.vague.current_spawned) + " / " + str(game.vague.total_enemies), 15, "blue", (gui_size[0]-100, 230), gui)
+		RenderText("Ennemis restants: "+str(game.vague.total_enemies-game.vague.current_spawned+len(game.all_enemies)), 15, "blue", (gui_size[0]-100, 250), gui)
+		delta = int(game.vague.time_after_vague + (game.vague.total_enemies-game.vague.current_spawned)*game.vague.time_between_enemies + (game.vague.time_between_enemies-(time.time()-game.vague.last_spawn_time)))
+		RenderText("Prochaine vague dans ", 15, "blue", (gui_size[0]-100, 270), gui)
+		RenderText("{:0>2d}".format(int(delta/60)) + ":" + "{:0>2d}".format(delta%60), 20, "blue", (gui_size[0]-100, 290), gui)
 
 	index = 0
 	for current_tower in tower_data.towers:

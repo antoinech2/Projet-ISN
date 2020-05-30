@@ -56,6 +56,8 @@ class Game():
 		self.money = 100
 		self.ennemies_killed = 0
 
+		self.in_preparation = True
+
 		#Initialisation des ennemis
 		self.all_enemies = pygame.sprite.Group()
 		#Initialisation des tours
@@ -131,6 +133,10 @@ class Game():
 							tower_type_collision = interfaces.CheckMouseCollision(self)
 							if tower_type_collision != None:
 								self.placing_tower.add(tower.Tower(self, tower_type_collision))
+				if event.type == pygame.KEYDOWN:
+					if event.key == pygame.K_SPACE:
+						if self.in_preparation:
+							self.in_preparation = False
 
 			#Boucle lors de la partie
 			if self.current_gui == "game":
@@ -138,7 +144,8 @@ class Game():
 				#CALCUL DU TICK
 
 				#Calcul de la vague (apparition des ennemis si nécessaire)
-				self.vague.CalcVague()
+				if self.in_preparation == False:
+					self.vague.CalcVague()
 				#Avancement des ennemis et suppression des ennemis qui sont au bout du chemin
 				for current_enemy in self.all_enemies:
 					current_enemy.Move()
@@ -185,6 +192,8 @@ class Game():
 					if current_tower.rect.collidepoint(pygame.mouse.get_pos()):
 						current_tower.DisplayRange()
 						self.screen.blit(interfaces.ShowTowerStats(self, current_tower), (0,self.screen_size[1]*0.8))
+				if self.in_preparation:
+					interfaces.RenderText("Appuyez sur 'Espace' pour démarrer les vagues d'ennemis.", 25, "red", (self.screen_size[0]*0.8/2, self.screen_size[1]*0.8-30), self.screen)
 			elif self.current_gui == "pause":
 				interfaces.RenderText("Jeu en pause.", 80, "red", (self.screen_size[0]/2, self.screen_size[1]/4), self.screen)
 				interfaces.RenderText("Appuyez sur 'P' pour reprendre le jeu.", 45, "blue", (self.screen_size[0]/2-100, self.screen_size[1]/4+100), self.screen)
