@@ -97,11 +97,11 @@ class Tower(pygame.sprite.Sprite):
 				else:
 					pygame.draw.circle(self.placement_color,pygame.Color(255,0,0,75),self.placement_color.get_rect().center, self.radius)
 		else:
-			self.rect.center = (-100,-100)
+			self.rect.center = (-1000,-1000)
 
 	def Display(self):
 		self.game.screen.blit(self.placement_color, self.rect.topleft)
-		if self.game.money <= self.cost:
+		if self.game.money < self.cost:
 			interfaces.RenderText("Fonds insuffisants", 15, "red", (self.rect.center[0],self.rect.center[1]-10), self.game.screen)
 
 	def PlaceTower(self, position):
@@ -147,11 +147,11 @@ class Tower(pygame.sprite.Sprite):
 						pygame.draw.ellipse(self.life_bar, pygame.Color("black"), self.life_bar.get_rect())
 						life_percent = self.shoot_remain/self.shoot_max
 						new_color = pygame.Color(int(255-(255*life_percent)),int(255*life_percent),0)
-						pygame.draw.arc(self.life_bar, new_color, self.life_bar.get_rect(), math.pi/2, life_percent*2*math.pi+math.pi/2, 20)
-						pygame.draw.arc(self.life_bar, new_color, pygame.Rect(self.life_bar.get_rect().left+3, self.life_bar.get_rect().top+1, self.life_bar_range*2-4, self.life_bar_range*2), math.pi/2, life_percent*2*math.pi+math.pi/2, 17)
-						pygame.draw.arc(self.life_bar, new_color, pygame.Rect(self.life_bar.get_rect().left+1, self.life_bar.get_rect().top+3, self.life_bar_range*2-4, self.life_bar_range*2), math.pi/2, life_percent*2*math.pi+math.pi/2, 17)
-						pygame.draw.arc(self.life_bar, new_color, pygame.Rect(self.life_bar.get_rect().left+3, self.life_bar.get_rect().top+3, self.life_bar_range*2-4, self.life_bar_range*2), math.pi/2, life_percent*2*math.pi+math.pi/2, 17)
-						pygame.draw.arc(self.life_bar, new_color, pygame.Rect(self.life_bar.get_rect().left+1, self.life_bar.get_rect().top+1, self.life_bar_range*2-4, self.life_bar_range*2), math.pi/2, life_percent*2*math.pi+math.pi/2, 17)
+						pygame.draw.arc(self.life_bar, new_color, self.life_bar.get_rect(), math.pi/2, life_percent*2*math.pi+math.pi/2, int(self.life_bar.get_rect().height/2)-2)
+						pygame.draw.arc(self.life_bar, new_color, pygame.Rect(self.life_bar.get_rect().left+3, self.life_bar.get_rect().top+1, self.life_bar_range*2-4, self.life_bar_range*2), math.pi/2, life_percent*2*math.pi+math.pi/2, int(self.life_bar.get_rect().height/2)-2)
+						pygame.draw.arc(self.life_bar, new_color, pygame.Rect(self.life_bar.get_rect().left+1, self.life_bar.get_rect().top+3, self.life_bar_range*2-4, self.life_bar_range*2), math.pi/2, life_percent*2*math.pi+math.pi/2, int(self.life_bar.get_rect().height/2)-2)
+						pygame.draw.arc(self.life_bar, new_color, pygame.Rect(self.life_bar.get_rect().left+3, self.life_bar.get_rect().top+3, self.life_bar_range*2-4, self.life_bar_range*2), math.pi/2, life_percent*2*math.pi+math.pi/2, int(self.life_bar.get_rect().height/2)-2)
+						pygame.draw.arc(self.life_bar, new_color, pygame.Rect(self.life_bar.get_rect().left+1, self.life_bar.get_rect().top+1, self.life_bar_range*2-4, self.life_bar_range*2), math.pi/2, life_percent*2*math.pi+math.pi/2, int(self.life_bar.get_rect().height/2)-2)
 				else:
 					break
 			if ennemies_attacked > 0:
