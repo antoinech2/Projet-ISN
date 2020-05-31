@@ -32,24 +32,28 @@ def RenderRightGUI(game):
 	gui_size = (0.2*game.screen_size[0],game.screen_size[1])
 	gui = pygame.Surface(gui_size)
 	gui.fill(pygame.Color("gray"))
-	RenderText("FPS: "+str(game.last_fps), 10, "red", (gui_size[0]-30, gui_size[1]-10), gui)
+	RenderText("FPS: "+str(game.last_fps), 10, "red", (25,10), game.screen)
 	RenderText("Vies: "+str(round(game.health, 1)), 20, "orange", (gui_size[0]-100, 20), gui)
 	RenderText("Argent: "+str(round(game.money, 1)), 20, "orange", (gui_size[0]-100, 50), gui)
-	RenderText("Nombre de tours: "+str(len(game.all_towers)), 13, "brown", (gui_size[0]-100, 100), gui)
-	RenderText("Nombre d'ennemis: "+str(len(game.all_enemies)), 13, "brown", (gui_size[0]-100, 130), gui)
-	RenderText("Nombre d'ennemis vaincus: "+str(game.ennemies_killed), 13, "brown", (gui_size[0]-100, 160), gui)
+	RenderText("Nombre de tours: "+str(len(game.all_towers)), 13, "brown", (gui_size[0]-100, 80), gui)
+	RenderText("Nombre d'ennemis: "+str(len(game.all_enemies)), 13, "brown", (gui_size[0]-100, 100), gui)
+	RenderText("Nombre d'ennemis vaincus: "+str(game.ennemies_killed), 13, "brown", (gui_size[0]-100, 120), gui)
 	if game.in_preparation == False:
-		RenderText("Vague "+str(game.vague.current_vague+1), 25, "blue", (gui_size[0]-100, 200), gui)
-		RenderText("Nombre d'ennemis: "+ str(game.vague.current_spawned) + " / " + str(game.vague.total_enemies), 15, "blue", (gui_size[0]-100, 230), gui)
-		RenderText("Ennemis restants: "+str(game.vague.total_enemies-game.vague.current_spawned+len(game.all_enemies)), 15, "blue", (gui_size[0]-100, 250), gui)
+		RenderText("Vague "+str(game.vague.current_vague+1), 25, "blue", (gui_size[0]-100, 150), gui)
+		RenderText("Nombre d'ennemis: "+ str(game.vague.current_spawned) + " / " + str(game.vague.total_enemies), 15, "blue", (gui_size[0]-100, 180), gui)
+		RenderText("Ennemis restants: "+str(game.vague.total_enemies-game.vague.current_spawned+len(game.all_enemies)), 15, "blue", (gui_size[0]-100, 200), gui)
 		delta = int(game.vague.time_after_vague + (game.vague.total_enemies-game.vague.current_spawned)*game.vague.time_between_enemies + (game.vague.time_between_enemies-(time.time()-game.vague.last_spawn_time)))
-		RenderText("Prochaine vague dans ", 15, "blue", (gui_size[0]-100, 270), gui)
-		RenderText("{:0>2d}".format(int(delta/60)) + ":" + "{:0>2d}".format(delta%60), 20, "blue", (gui_size[0]-100, 290), gui)
-
+		RenderText("Prochaine vague dans ", 15, "blue", (gui_size[0]-100, 220), gui)
+		RenderText("{:0>2d}".format(int(delta/60)) + ":" + "{:0>2d}".format(delta%60), 20, "blue", (gui_size[0]-100, 245), gui)
+	RenderText("Sélection des tours:", 19, "#007512", (gui_size[0]/2, 280), gui)
 	index = 0
 	for current_tower in tower_data.towers:
-		pygame.draw.rect(gui, pygame.Color(117, 117, 117), pygame.Rect(5+65*(index%3),320+65*int(index/3),55,55), 3)
-		gui.blit(pygame.transform.scale(tower.Tower.images[index],(45,45)), (10+65*(index%3),325+65*int(index/3)))
+		if current_tower["cost"] > game.money:
+			width = 0
+		else:
+			width = 3
+		pygame.draw.rect(gui, pygame.Color(117, 117, 117), pygame.Rect(5+65*(index%3),300+65*int(index/3),55,55), width)
+		gui.blit(pygame.transform.scale(tower.Tower.images[index],(45,45)), (10+65*(index%3),305+65*int(index/3)))
 		index += 1
 	return gui
 
@@ -57,7 +61,7 @@ def CheckMouseCollision(game):
 	gui_size_x = 0.8*game.screen_size[0]
 	index = 0
 	for current_tower in tower_data.towers:
-		rect = pygame.Rect(gui_size_x+5+65*(index%3),320+65*int(index/3),55,55)
+		rect = pygame.Rect(gui_size_x+5+65*(index%3),300+65*int(index/3),55,55)
 		if rect.collidepoint(pygame.mouse.get_pos()):
 			return index
 		index += 1
@@ -86,6 +90,8 @@ def RenderBottomGUI(game):
 	gui_size = (0.8*game.screen_size[0]+1,0.2*game.screen_size[1]+1)
 	gui = pygame.Surface(gui_size)
 	gui.fill(pygame.Color("gray"))
+	if game.vague.is_finished:
+		RenderText("Appuyez sur 'Espace' pour déclencher la prochaine vague", 20, "red", (gui_size[0]/2, 30), gui)
 	return gui
 
 def ShowTowerStats(game, tower):
@@ -102,7 +108,7 @@ def ShowTowerStats(game, tower):
 	RenderText("Réduction de vie par tir: "+str(tower.shoot_reduction)+"±"+str(tower.random_shoot_reduction_range), 15, "black", (400, 40), gui)
 	RenderText("Prix: "+str(tower.cost), 15, "black", (400, 60), gui)
 	RenderText("Vitesse des projectiles: "+str(tower.projectile_speed)+"±"+str(tower.random_projectile_speed_range), 15, "black", (400, 80), gui)
-	RenderText("Rayon d'action: "+str(tower.range), 15, "black", (400, 100), gui)
+	RenderText("Rayon d'action: "+str(tower.range/game.box_size_pixel[0]), 15, "black", (400, 100), gui)
 
 	RenderText("Statistiques sur la tour: ", 20, "red", (650, 20), gui)
 	RenderText("Vies: "+str(round(tower.shoot_remain,1))+"/"+str(tower.shoot_max)+" ("+str(round(tower.shoot_remain/tower.shoot_max*100))+" %)", 15, "black", (650, 40), gui)
