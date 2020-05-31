@@ -37,7 +37,7 @@ def RenderRightGUI(game):
 	RenderText("Argent: "+str(round(game.money, 1)), 20, "orange", (gui_size[0]-100, 50), gui)
 	RenderText("Nombre de tours: "+str(len(game.all_towers)), 13, "brown", (gui_size[0]-100, 80), gui)
 	RenderText("Nombre d'ennemis: "+str(len(game.all_enemies)), 13, "brown", (gui_size[0]-100, 100), gui)
-	RenderText("Nombre d'ennemis vaincus: "+str(game.ennemies_killed), 13, "brown", (gui_size[0]-100, 120), gui)
+	RenderText("Ennemis vaincus: "+str(game.ennemies_killed), 13, "brown", (gui_size[0]-100, 120), gui)
 	if game.in_preparation == False:
 		RenderText("Vague "+str(game.vague.current_vague+1), 25, "blue", (gui_size[0]-100, 150), gui)
 		RenderText("Nombre d'ennemis: "+ str(game.vague.current_spawned) + " / " + str(game.vague.total_enemies), 15, "blue", (gui_size[0]-100, 180), gui)

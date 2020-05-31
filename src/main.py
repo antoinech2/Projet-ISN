@@ -51,6 +51,8 @@ class Game():
 		self.last_second = time.time()
 		self.current_fps = 0
 		self.last_fps = 0
+		self.start_game = time.time()
+		self.restart_game = False
 
 		self.health = 2000
 		self.money = 100
@@ -133,12 +135,19 @@ class Game():
 							tower_type_collision = interfaces.CheckMouseCollision(self)
 							if tower_type_collision != None:
 								self.placing_tower.add(tower.Tower(self, tower_type_collision))
-				if event.type == pygame.KEYDOWN:
-					if event.key == pygame.K_SPACE:
-						if self.in_preparation:
-							self.in_preparation = False
-						elif self.vague.is_finished:
-							self.vague.NewVague()
+					elif event.type == pygame.KEYDOWN:
+						if event.key == pygame.K_SPACE:
+							if self.in_preparation:
+								self.in_preparation = False
+							elif self.vague.is_finished:
+								self.vague.NewVague()
+				elif self.current_gui == "game_lost":
+					if event.type == pygame.KEYDOWN:
+						if event.key == pygame.K_SPACE:
+							self.restart_game = True
+							self.is_game_running = False
+						elif event.key == pygame.K_ESCAPE:
+							self.is_game_running = False
 
 			#Boucle lors de la partie
 			if self.current_gui == "game":
@@ -204,14 +213,19 @@ class Game():
 			#Boucle lors de l'écran de fin
 			elif self.current_gui == "game_lost":
 				self.screen.fill(pygame.Color("blue"))
-				interfaces.RenderText("Fin de partie.", 80, "red", (self.screen_size[0]/2, self.screen_size[1]/4), self.screen)
-				interfaces.RenderText("Vous n'avez plus de vies.", 50, "yellow", (self.screen_size[0]/2, self.screen_size[1]/4+100), self.screen)
+				interfaces.RenderText("Fin de partie.", 80, "red", (self.screen_size[0]/2, 60), self.screen)
+				interfaces.RenderText("Vous n'avez plus de vies.", 50, "yellow", (self.screen_size[0]/2, 150), self.screen)
+				interfaces.RenderText("Statistiques:", 35, "#0acbf2", (self.screen_size[0]/2, 210), self.screen)
+				interfaces.RenderText("Vagues survécues: "+str(self.vague.current_vague), 30, "#00e01a", (self.screen_size[0]/2, 250), self.screen)
+				interfaces.RenderText("Ennemis vaincus: "+str(self.ennemies_killed), 30, "#00e01a", (self.screen_size[0]/2, 290), self.screen)
+				interfaces.RenderText("Tours placées: "+str(len(self.all_towers)), 30, "#00e01a", (self.screen_size[0]/2, 330), self.screen)
+				interfaces.RenderText("Temps de jeu: "+str(round((time.time()-self.start_game)/60))+" min", 30, "#00e01a", (self.screen_size[0]/2, 370), self.screen)
+				interfaces.RenderText("Appuyez sur 'Espace' pour rejouer", 40, "#e000dc", (self.screen_size[0]/2, 440), self.screen)
+				interfaces.RenderText("Appuyez sur 'Echap' pour quitter", 40, "#e000dc", (self.screen_size[0]/2, 500), self.screen)
 
 			#Rafraîchissement de l'écran
 			pygame.display.flip()
 
-		#Arrêt de pygame lorsque on sort de la boucle
-		pygame.quit()
 	############################################
 
 #Définition de la fonction principale:
@@ -223,5 +237,10 @@ def __main__():
 	#Initialisation du jeu
 	game = Game()
 	game.Run()
+	if game.restart_game:
+		__main__()
+	else:
+		#Arrêt de pygame lorsque on quitte le jeu
+		pygame.quit()
 
 __main__()

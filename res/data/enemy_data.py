@@ -18,7 +18,7 @@ enemies = [
 "max_health" : (50,0),
 "resistance" : (1,0),
 "speed" : (0.6,0),
-"gain" : (5,0),
+"gain" : (2.5,0),
 "life_bar_size" : (17,3)},
 
 {"name" : "Basique",
@@ -27,7 +27,7 @@ enemies = [
 "max_health" : (150,15),
 "resistance" : (0.9,0.04),
 "speed" : (0.65,0.05),
-"gain" : (8,1),
+"gain" : (4.5,1),
 "life_bar_size" : (19,3)},
 
 {"name" : "Basique",
@@ -36,7 +36,7 @@ enemies = [
 "max_health" : (200,25),
 "resistance" : (0.85,0.06),
 "speed" : (0.7,0.08),
-"gain" : (15,2),
+"gain" : (8,2),
 "life_bar_size" : (22,3)},
 
 {"name" : "Basique",
@@ -54,7 +54,7 @@ enemies = [
 "max_health" : (200,25),
 "resistance" : (0.9,0.02),
 "speed" : (1.8,0.2),
-"gain" : (50,4),
+"gain" : (15,4),
 "life_bar_size" : (25,4)},
 
 {"name" : "Basique",
@@ -63,7 +63,7 @@ enemies = [
 "max_health" : (80,20),
 "resistance" : (0.95,0.05),
 "speed" : (2.7,0.5),
-"gain" : (100,5),
+"gain" : (26,5),
 "life_bar_size" : (25,4)},
 
 {"name" : "Résistant",
@@ -72,7 +72,7 @@ enemies = [
 "max_health" : (400,75),
 "resistance" : (0.75,0.15),
 "speed" : (0.55,0.1),
-"gain" : (30,15),
+"gain" : (35,15),
 "life_bar_size" : (27,5)},
 
 {"name" : "Basique",
@@ -81,7 +81,7 @@ enemies = [
 "max_health" : (600,100),
 "resistance" : (0.6,0.1),
 "speed" : (0.45,0.2),
-"gain" : (50,25),
+"gain" : (30,25),
 "life_bar_size" : (30,5)},
 
 {"name" : "Basique",
@@ -90,7 +90,7 @@ enemies = [
 "max_health" : (150,100),
 "resistance" : (0.3,0.03),
 "speed" : (0.35,0.07),
-"gain" : (50,65),
+"gain" : (100,65),
 "life_bar_size" : (33,5)},
 
 {"name" : "Basique",
@@ -98,7 +98,7 @@ enemies = [
 "image_size" : (55, 55),
 "max_health" : (1000,150),
 "resistance" : (0.15,0.05),
-"speed" : (0.2,0.02),
+"speed" : ( 0.2,0.02),
 "gain" : (200,20),
 "life_bar_size" : (35,7)}
 ]

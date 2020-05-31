@@ -32,11 +32,11 @@ class Vague():
 		"Définition du constructeur"
 		self.game = game
 		self.current_vague = -1
+		self.max_vague = len(vague_data.vagues)
 		self.NewVague()
 
 	def NewVague(self):
 		"Méthode pour initialiser une nouvelle vague"
-		self.max_vague = len(vague_data.vagues)
 		if self.current_vague +1 < self.max_vague:
 			self.current_vague += 1
 		data = vague_data.vagues[self.current_vague]
