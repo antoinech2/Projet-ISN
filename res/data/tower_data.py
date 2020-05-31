@@ -25,7 +25,7 @@ towers = [
 "life_bar_range" : 19,
 "projectile_speed" : (2.5,0.5)},
 
-{"name" : "Big range",
+{"name" : "Grande portée",
 "image_path" : "../res/textures/tower/tower_3.png",
 "image_size" : (55, 55),
 "range" : 6,
@@ -64,7 +64,7 @@ towers = [
 "life_bar_range" : 20,
 "projectile_speed" : (3,0.5)},
 
-{"name" : "MultiShot",
+{"name" : "Tir multiple",
 "image_path" : "../res/textures/tower/tower_8.png",
 "image_size" : (50, 50),
 "range" : 1.5,
@@ -77,7 +77,7 @@ towers = [
 "life_bar_range" : 27,
 "projectile_speed" : (4,0.5)},
 
-{"name" : "Random",
+{"name" : "Aléatoire",
 "image_path" : "../res/textures/tower/tower_6.png",
 "image_size" : (30, 30),
 "range" : 2.25,
@@ -90,7 +90,7 @@ towers = [
 "life_bar_range" : 17,
 "projectile_speed" : (2.5,1.5)},
 
-{"name" : "Big damage",
+{"name" : "Gros dégats",
 "image_path" : "../res/textures/tower/tower_5.png",
 "image_size" : (55, 55),
 "range" : 1.5,
@@ -155,7 +155,7 @@ towers = [
 "life_bar_range" : 19,
 "projectile_speed" : (4,2.5)},
 
-{"name" : "Ultimate",
+{"name" : "Ultime",
 "image_path" : "../res/textures/tower/tower_7.png",
 "image_size" : (64, 64),
 "range" : 3,
