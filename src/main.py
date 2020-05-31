@@ -137,6 +137,8 @@ class Game():
 					if event.key == pygame.K_SPACE:
 						if self.in_preparation:
 							self.in_preparation = False
+						elif self.vague.is_finished:
+							self.vague.NewVague()
 
 			#Boucle lors de la partie
 			if self.current_gui == "game":
