@@ -188,21 +188,21 @@ class Game():
 				self.all_enemies.draw(self.screen)
 				self.all_projectiles.draw(self.screen)
 				#Affichage des menus graphiques latéraux
-				self.screen.blit(interfaces.RenderBottomGUI(self),(0,self.screen_size[1]*0.8))
-				self.screen.blit(interfaces.RenderRightGUI(self),(self.screen_size[0]*0.8,0))
+				self.screen.blit(interfaces.RenderBottomGUI(self),(0,int(self.screen_size[1]*0.8)))
+				self.screen.blit(interfaces.RenderRightGUI(self),(int(self.screen_size[0]*0.8),0))
 				tower_type_collision = interfaces.CheckMouseCollision(self)
 				if tower_type_collision != None:
-					self.screen.blit(interfaces.ShowPlacementTowerStats(self, tower_type_collision),(0,self.screen_size[1]*0.8))
+					self.screen.blit(interfaces.ShowPlacementTowerStats(self, tower_type_collision),(0,int(self.screen_size[1]*0.8)))
 				#Affichage des barres de vie des ennemis et les statistiques de l'ennemi sélectionné.
 				for current_enemy in self.all_enemies:
 					current_enemy.DisplayLifeBar()
 					if current_enemy.rect.collidepoint(pygame.mouse.get_pos()):
-						self.screen.blit(interfaces.ShowEnnemyStats(self, current_enemy), (0,self.screen_size[1]*0.8))
+						self.screen.blit(interfaces.ShowEnnemyStats(self, current_enemy), (0,int(self.screen_size[1]*0.8)))
 				#Affichage du rayon et des statistiques de la tour sélectionnée
 				for current_tower in self.all_towers:
 					if current_tower.rect.collidepoint(pygame.mouse.get_pos()):
 						current_tower.DisplayRange()
-						self.screen.blit(interfaces.ShowTowerStats(self, current_tower), (0,self.screen_size[1]*0.8))
+						self.screen.blit(interfaces.ShowTowerStats(self, current_tower), (0,int(self.screen_size[1]*0.8)))
 				if self.in_preparation:
 					interfaces.RenderText("Appuyez sur 'Espace' pour démarrer les vagues d'ennemis.", 25, "red", (self.screen_size[0]*0.8/2, self.screen_size[1]*0.8-30), self.screen)
 			elif self.current_gui == "pause":
